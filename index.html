@@ -115,9 +115,9 @@ tbody tr:hover{background:rgba(47,114,245,0.02);}
 td{padding:11px 14px;vertical-align:middle;}
 td:first-child{padding-left:16px;}
 .td-co{font-weight:500;white-space:nowrap;color:var(--navy);font-size:0.83rem;}
-.td-prog{color:var(--navy);font-size:0.81rem;max-width:200px;line-height:1.4;font-weight:300;}
-.sector-cell{color:var(--grey);font-size:0.76rem;white-space:nowrap;}
-.date-cell{color:var(--grey);font-size:0.74rem;white-space:nowrap;}
+.td-prog{color:var(--navy);font-size:0.83rem;max-width:200px;line-height:1.4;font-weight:400;}
+.sector-cell{color:var(--navy);font-size:0.83rem;white-space:nowrap;font-weight:400;}
+.date-cell{color:var(--navy);font-size:0.83rem;white-space:nowrap;font-weight:400;}
 .close-ok{font-size:0.77rem;color:var(--navy);}
 .close-urgent{font-size:0.77rem;font-weight:500;color:#b06b00;}
 .close-gone{font-size:0.77rem;color:#b02030;}
@@ -266,16 +266,17 @@ td:first-child{padding-left:16px;}
       <div class="auth-success" id="signup-success"></div>
       <div class="form-section-title" style="border-top:none;padding-top:0;margin-top:0;">About you</div>
       <div class="form-row">
-        <div class="form-group"><label>First Name</label><input class="form-input" type="text" id="su-firstname" placeholder="e.g. Hamza"></div>
-        <div class="form-group"><label>Last Name</label><input class="form-input" type="text" id="su-lastname" placeholder="e.g. Shah"></div>
+        <div class="form-group"><label>First Name</label><input class="form-input" type="text" id="su-firstname" placeholder=""></div>
+        <div class="form-group"><label>Last Name</label><input class="form-input" type="text" id="su-lastname" placeholder=""></div>
       </div>
       <div class="form-row">
         <div class="form-group">
           <label>Gender</label>
           <select class="form-select" id="su-gender">
-            <option value="">Prefer not to say</option>
-            <option>Male</option><option>Female</option><option>Non-binary</option>
-            <option>Prefer to self-describe</option><option>Prefer not to say</option>
+            <option value="">Select...</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Prefer not to say</option>
           </select>
         </div>
         <div class="form-group">
@@ -307,7 +308,7 @@ td:first-child{padding-left:16px;}
         <div class="form-group"><label>Expected Graduation Year</label><input class="form-input" type="text" id="su-end" placeholder="e.g. 2027"></div>
       </div>
       <div class="form-section-title">Account details</div>
-      <div class="form-group"><label>Email Address</label><input class="form-input" type="email" id="su-email" placeholder="your@university.ac.uk"></div>
+      <div class="form-group"><label>Email Address</label><input class="form-input" type="email" id="su-email" placeholder="your@email.com"></div>
       <div class="form-group"><label>Create Password</label><input class="form-input" type="password" id="su-password" placeholder="At least 8 characters"></div>
       <div class="check-row">
         <input type="checkbox" id="su-terms">
@@ -404,7 +405,7 @@ td:first-child{padding-left:16px;}
       <table>
         <thead>
           <tr>
-            <th>Progress</th><th>Company</th><th>Programme</th>
+            <th>Progress</th><th></th><th>Company</th><th>Programme</th>
             <th>Sector</th><th>Opens</th><th>Closes</th><th>Status</th><th>Apply</th>
           </tr>
         </thead>
@@ -427,7 +428,7 @@ td:first-child{padding-left:16px;}
     <p>Be first to know when new life sciences roles go live. Instant alerts, deadline reminders, weekly digest - 19.99 per cycle.</p>
     <input class="modal-input" type="text" placeholder="Your name">
     <input class="modal-input" type="email" placeholder="University email">
-    <button class="btn-modal" onclick="window.open('https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK','_blank')">Get Instant Alerts - &pound;19.99 / cycle</button>
+    <button class="btn-modal" onclick="window.open(https://buy.stripe.com/dRmdRa5vzdI08BbfJ09ws00)">Get Instant Alerts - &pound;19.99 / cycle</button>
     <p class="modal-note">Cancel anytime &middot; Secure payment via Stripe</p>
   </div>
 </div>
@@ -660,11 +661,45 @@ function loadSheet(){
         var key=typeKey(r.Type);if(!key)return;
         sheetJobs[key].push({company:r.Company||'',prog:r.Programme||'',sector:r.Sector||'',opens:r.Opens||'',closes:r.Closes||'',status:(r.Status||'').toLowerCase().trim(),url:r.URL||''});
       });
-      dataLoaded=true;renderLive();
+      dataLoaded=true;
+      if(!currentUser){
+        renderLive();
+      } else {
+        // reload progress then render so dropdown values are correct
+        sb.from('progress').select('*').eq('user_id',currentUser.id).then(function(res){
+          if(res.data){
+            userProgress={};
+            res.data.forEach(function(row){userProgress[pKey(row.company,row.programme)]=row.status;});
+          }
+          renderLive();
+        });
+      }
     })
     .catch(function(){
       document.getElementById('tracker-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:40px;color:#7b89a8;font-size:0.85rem;">Could not load roles. Please try again later.</td></tr>';
     });
+}
+
+var LOGO_DOMAINS = {
+  'gsk':'gsk.com','astrazeneca':'astrazeneca.com','pfizer':'pfizer.com',
+  'roche':'roche.com','novartis':'novartis.com','sanofi':'sanofi.com',
+  'eli lilly':'lilly.com','abbvie':'abbvie.com','johnson & johnson':'jnj.com',
+  'bayer':'bayer.com','takeda':'takeda.com','ucb pharma':'ucb.com',
+  'boehringer ingelheim':'boehringer-ingelheim.com','ipsen':'ipsen.com',
+  'seqirus':'seqirus.com','amgen':'amgen.com','msd':'msd.com',
+  'huron consulting':'huronconsultinggroup.com','lek consulting':'lek.com',
+  'putnam associates':'putnam.com','bain & company':'bain.com'
+};
+function setLogos(){
+  document.querySelectorAll('.logo-cell').forEach(function(cell){
+    var id=cell.getAttribute('data-co')||'';
+    var domain=LOGO_DOMAINS[id.toLowerCase().trim()]||(id.toLowerCase().replace(/[^a-z0-9]/g,'')+'.com');
+    cell.innerHTML='<img src="https://img.logo.dev/'+domain+'?token=pk_f9LQatIqQPGlbfeY6R665A&size=40" style="width:28px;height:28px;object-fit:contain;border-radius:4px;">';
+  });
+}
+function encodeLogoName(company){
+  var key=company.toLowerCase().trim();
+  return LOGO_DOMAINS[key]||key.replace(/[^a-z0-9]/g,'')+'.com';
 }
 
 function spCls(s){if(s==='recently opened')return 'sp-recent';if(s==='open')return 'sp-open';if(s==='closing')return 'sp-closing';return 'sp-closed';}
@@ -691,12 +726,13 @@ function renderLive(){
   document.getElementById('tracker-tbody').innerHTML=filtered.map(function(j){
     var btn=j.url?'<button class="apply-btn" onclick="window.open(\''+j.url+'\',\'_blank\')">Apply</button>':'<button class="apply-btn" style="opacity:0.4;cursor:default;">Soon</button>';
     return '<tr>'+buildProgressCell(j.company,j.prog)+
-      '<td class="td-co">'+j.company+'</td><td class="td-prog">'+j.prog+'</td>'+
+      '<td class="logo-cell" data-co="'+j.company+'"></td>'+ '<td class="td-co">'+j.company+'</td><td class="td-prog">'+j.prog+'</td>'+
       '<td class="sector-cell">'+j.sector+'</td><td class="date-cell">'+j.opens+'</td>'+
       '<td><span class="'+closeCls(j.status)+'">'+j.closes+'</span></td>'+
       '<td><span class="sp '+spCls(j.status)+'">'+spLbl(j.status)+'</span></td>'+
       '<td>'+btn+'</td></tr>';
   }).join('');
+  setLogos();
 }
 
 function openTracker(type){
