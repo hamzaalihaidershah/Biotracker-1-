@@ -5,198 +5,192 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BioTracker - UK Life Sciences Internships</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root {
-  --navy: #0f1b3d;
-  --navy-mid: #1a2d5a;
-  --white: #ffffff;
-  --off-white: #f6f8fc;
-  --grey: #7b89a8;
-  --grey-light: #e2e8f4;
-  --grey-mid: #c4cfe6;
-  --accent: #2f72f5;
-  --accent-lt: #5590ff;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Inter',sans-serif; font-weight:300; background:var(--white); color:var(--navy); overflow-x:hidden; }
-
-.page { display:none; min-height:100vh; flex-direction:column; }
-.page.active { display:flex; }
-
-nav {
-  background:var(--navy);
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 52px; height:64px;
-  border-bottom:1px solid rgba(255,255,255,0.06);
-  flex-shrink:0;
-}
-.nav-logo { display:flex; align-items:center; gap:10px; cursor:pointer; }
-.nav-logo-text { font-family:'Playfair Display',serif; font-weight:600; font-size:1.15rem; color:white; letter-spacing:0.2px; }
-.nav-logo-text em { color:var(--accent-lt); font-style:italic; }
-.nav-links { display:flex; align-items:center; gap:32px; }
-.nav-links a { color:rgba(255,255,255,0.55); text-decoration:none; font-size:0.84rem; font-weight:300; letter-spacing:0.3px; cursor:pointer; transition:color .2s; }
-.nav-links a:hover { color:white; }
-
-.hero {
-  background:var(--navy);
-  padding:100px 52px 90px; flex:1;
-  display:flex; align-items:center; justify-content:center; text-align:center;
-  position:relative; overflow:hidden;
-}
-.hero::before {
-  content:''; position:absolute; right:-60px; top:-60px;
-  width:520px; height:520px;
-  background:radial-gradient(circle,rgba(47,114,245,0.12) 0%,transparent 65%);
-  border-radius:50%;
-}
-.hero-inner { max-width:700px; position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; }
-.hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4.5vw,3.6rem); font-weight:400; color:white; line-height:1.18; margin-bottom:24px; }
-.hero p { color:rgba(255,255,255,0.45); font-size:0.97rem; max-width:480px; line-height:1.82; margin-bottom:44px; font-weight:300; }
-.btn-hero {
-  display:inline-flex; align-items:center; gap:10px;
-  background:var(--accent); color:white;
-  padding:16px 34px; border-radius:10px; font-weight:500; font-size:1rem;
-  border:none; cursor:pointer; font-family:'Inter',sans-serif; transition:all .2s;
-}
-.btn-hero:hover { background:var(--accent-lt); transform:translateY(-2px); }
-.hero-stats { display:flex; gap:48px; margin-top:56px; flex-wrap:wrap; padding-top:40px; border-top:1px solid rgba(255,255,255,0.08); justify-content:center; }
-.stat-num { font-family:'Playfair Display',serif; font-size:1.9rem; font-weight:400; color:white; display:block; line-height:1; margin-bottom:4px; }
-.stat-num em { color:var(--accent-lt); font-style:normal; }
-.stat-label { color:rgba(255,255,255,0.4); font-size:0.78rem; }
-
-.how-section { background:var(--off-white); padding:88px 52px; border-top:1px solid var(--grey-light); }
-.sec-inner { max-width:1100px; margin:0 auto; }
-.sec-eyebrow { font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:var(--accent); margin-bottom:12px; }
-.sec-title { font-family:'Playfair Display',serif; font-size:clamp(1.6rem,2.8vw,2.4rem); font-weight:400; color:var(--navy); margin-bottom:52px; line-height:1.22; max-width:440px; }
-.steps-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
-.step-card { background:white; border:1.5px solid var(--grey-light); border-radius:14px; padding:30px; transition:all .25s; }
-.step-card:hover { border-color:rgba(47,114,245,0.3); transform:translateY(-3px); box-shadow:0 12px 32px rgba(15,27,61,0.07); }
-.step-num { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:400; color:var(--grey-light); margin-bottom:18px; }
-.step-card h4 { font-size:0.9rem; font-weight:500; color:var(--navy); margin-bottom:10px; letter-spacing:0.2px; }
-.step-card p { font-size:0.85rem; color:var(--grey); line-height:1.72; }
-
-.pro-section { background:var(--navy); padding:88px 52px; }
-.pro-inner { max-width:900px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
-.pro-left .sec-eyebrow { color:var(--accent-lt); }
-.pro-left .sec-title { color:white; margin-bottom:20px; }
-.pro-left p { color:rgba(255,255,255,0.5); font-size:0.92rem; line-height:1.78; margin-bottom:32px; }
-.pro-feats { list-style:none; margin-bottom:32px; }
-.pro-feats li { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.06); color:rgba(255,255,255,0.7); font-size:0.88rem; }
-.pro-feats li:last-child { border:none; }
-.feat-icon { width:28px; height:28px; background:rgba(47,114,245,0.15); border-radius:7px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:0.8rem; }
-.pro-card-right { background:white; border-radius:18px; padding:36px; box-shadow:0 20px 60px rgba(0,0,0,0.25); }
-.pro-plan-name { font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--grey); margin-bottom:6px; }
-.pro-price { font-family:'Inter',sans-serif; font-size:2.8rem; font-weight:300; color:var(--navy); letter-spacing:-2px; line-height:1; margin-bottom:4px; }
-.pro-price-sub { font-size:0.8rem; color:var(--grey); margin-bottom:26px; }
-.pro-card-feats { list-style:none; margin-bottom:26px; }
-.pro-card-feats li { padding:9px 0; font-size:0.86rem; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--grey-light); color:var(--navy); }
-.pro-card-feats li:last-child { border:none; }
-.ck { color:var(--accent); font-weight:600; flex-shrink:0; }
-.btn-pro { width:100%; padding:14px; border-radius:10px; font-weight:600; font-size:0.92rem; cursor:pointer; font-family:'Inter',sans-serif; border:none; background:var(--accent); color:white; transition:all .2s; }
-.btn-pro:hover { background:var(--accent-lt); }
-.btn-free { width:100%; margin-top:10px; padding:12px; border-radius:10px; font-weight:400; font-size:0.88rem; cursor:pointer; font-family:'Inter',sans-serif; border:1.5px solid var(--grey-light); background:transparent; color:var(--grey); transition:all .2s; }
-.btn-free:hover { border-color:var(--navy); color:var(--navy); }
-
-footer { background:var(--navy); padding:36px 52px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; border-top:1px solid rgba(255,255,255,0.06); flex-shrink:0; }
-.footer-logo { font-family:'Playfair Display',serif; font-weight:400; color:white; font-size:1.15rem; cursor:pointer; letter-spacing:0.2px; }
-.footer-logo em { color:var(--accent-lt); font-style:italic; }
-footer p { color:rgba(255,255,255,0.28); font-size:0.77rem; }
-.footer-links { display:flex; gap:22px; }
-.footer-links a { color:rgba(255,255,255,0.35); text-decoration:none; font-size:0.8rem; cursor:pointer; transition:color .2s; }
-.footer-links a:hover { color:white; }
-
-.browse-hero { background:var(--navy); padding:72px 52px 64px; flex-shrink:0; text-align:center; display:flex; flex-direction:column; align-items:center; }
-.browse-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,4vw,3rem); font-weight:400; color:white; margin-bottom:14px; }
-.browse-hero p { color:rgba(255,255,255,0.45); font-size:0.92rem; max-width:480px; line-height:1.78; font-weight:300; }
-.browse-grid-wrap { flex:1; background:var(--off-white); padding:52px; }
-.browse-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; max-width:1100px; margin:0 auto; }
-.tracker-card {
-  background:white; border:1.5px solid var(--grey-light); border-radius:16px; padding:36px 28px;
-  cursor:pointer; transition:all .25s; display:flex; flex-direction:column; gap:18px;
-  position:relative; overflow:hidden;
-}
-.tracker-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--grey-light); transition:background .25s; }
-.tracker-card:hover { border-color:rgba(47,114,245,0.3); transform:translateY(-4px); box-shadow:0 16px 40px rgba(15,27,61,0.1); }
-.tracker-card:hover::before { background:var(--accent); }
-.tracker-icon { width:52px; height:52px; border-radius:12px; background:var(--off-white); border:1.5px solid var(--grey-light); display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
-.tracker-card h3 { font-size:0.95rem; font-weight:500; color:var(--navy); }
-.tracker-card p { font-size:0.82rem; color:var(--grey); line-height:1.65; flex:1; }
-.tracker-arrow { display:flex; align-items:center; justify-content:flex-end; margin-top:4px; color:var(--grey); font-size:1.2rem; transition:color .2s; }
-.tracker-card:hover .tracker-arrow { color:var(--accent); }
-
-.tracker-hero { background:var(--navy); padding:60px 52px 52px; flex-shrink:0; text-align:center; display:flex; flex-direction:column; align-items:center; }
-.back-btn { display:inline-flex; align-items:center; gap:7px; color:rgba(255,255,255,0.5); font-size:0.82rem; font-weight:400; cursor:pointer; margin-bottom:24px; transition:color .2s; background:none; border:none; font-family:'Inter',sans-serif; }
-.back-btn:hover { color:white; }
-.tracker-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(1.6rem,3.5vw,2.5rem); font-weight:400; color:white; margin-bottom:10px; }
-.tracker-hero p { color:rgba(255,255,255,0.45); font-size:0.92rem; max-width:480px; line-height:1.7; }
-.tracker-body { flex:1; background:var(--off-white); padding:36px 52px; }
-.tracker-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px; max-width:1100px; margin-left:auto; margin-right:auto; }
-.controls-left { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-.t-search { padding:9px 14px; border-radius:8px; border:1.5px solid var(--grey-light); font-family:'Inter',sans-serif; font-size:0.85rem; color:var(--navy); outline:none; transition:border-color .2s; background:white; width:220px; }
-.t-search:focus { border-color:var(--accent); }
-.t-select { padding:9px 32px 9px 14px; border-radius:8px; border:1.5px solid var(--grey-light); font-family:'Inter',sans-serif; font-size:0.85rem; color:var(--navy); background:white; outline:none; cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237b89a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; }
-.t-count { font-size:0.78rem; color:var(--grey); }
-.status-tabs { display:flex; gap:6px; flex-wrap:wrap; }
-.stab { padding:6px 14px; border-radius:7px; font-size:0.77rem; font-weight:400; cursor:pointer; border:1.5px solid var(--grey-light); background:white; color:var(--grey); transition:all .2s; font-family:'Inter',sans-serif; }
-.stab.active { background:var(--navy); color:white; border-color:var(--navy); }
-.stab:hover:not(.active) { border-color:var(--navy); color:var(--navy); }
-
-.table-wrap { background:white; border-radius:12px; border:1px solid var(--grey-light); overflow:hidden; overflow-x:auto; box-shadow:0 2px 12px rgba(15,27,61,0.05); max-width:1100px; margin:0 auto; }
-table { width:100%; border-collapse:collapse; min-width:700px; }
-thead tr { background:var(--navy); }
-thead th { color:rgba(255,255,255,0.4); font-size:0.63rem; font-weight:500; text-transform:uppercase; letter-spacing:1.2px; padding:12px 16px; text-align:left; white-space:nowrap; }
-thead th:first-child { padding-left:20px; }
-tbody tr { border-bottom:1px solid var(--grey-light); transition:background .12s; }
-tbody tr:last-child { border-bottom:none; }
-tbody tr:hover { background:rgba(47,114,245,0.03); }
-td { padding:12px 16px; vertical-align:middle; }
-td:first-child { padding-left:20px; }
-.td-co { font-weight:500; white-space:nowrap; color:var(--navy); font-size:0.83rem; }
-.td-prog { color:var(--navy); font-size:0.81rem; max-width:220px; line-height:1.4; font-weight:300; }
-.sector-cell { color:var(--grey); font-size:0.76rem; white-space:nowrap; }
-.date-cell { color:var(--grey); font-size:0.74rem; white-space:nowrap; }
-.close-ok { font-size:0.77rem; font-weight:400; color:var(--navy); white-space:nowrap; }
-.close-urgent { font-size:0.77rem; font-weight:500; color:#b06b00; white-space:nowrap; }
-.close-gone { font-size:0.77rem; font-weight:400; color:#b02030; white-space:nowrap; }
-.sp { display:inline-flex; align-items:center; gap:4px; font-size:0.66rem; font-weight:500; padding:3px 9px; border-radius:100px; white-space:nowrap; }
-.sp::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; flex-shrink:0; }
-.sp-recent { background:rgba(47,114,245,0.1); color:#2f72f5; }
-.sp-open { background:rgba(15,140,80,0.1); color:#0f8c50; }
-.sp-closing { background:rgba(176,107,0,0.1); color:#b06b00; }
-.sp-closed { background:rgba(176,32,48,0.1); color:#b02030; }
-.apply-btn { background:var(--navy); color:white; border:none; padding:6px 15px; border-radius:6px; font-size:0.72rem; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; transition:all .2s; white-space:nowrap; }
-.apply-btn:hover { background:var(--accent); }
-
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(8,14,35,0.65); backdrop-filter:blur(6px); z-index:1000; align-items:center; justify-content:center; }
-.modal-overlay.show { display:flex; }
-.modal { background:white; border-radius:18px; padding:38px; max-width:440px; width:92%; position:relative; animation:mIn .2s ease; }
-@keyframes mIn { from{opacity:0;transform:scale(0.96) translateY(10px)} to{opacity:1;transform:none} }
-.modal-x { position:absolute; top:16px; right:16px; background:var(--off-white); border:none; width:32px; height:32px; border-radius:8px; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; color:var(--grey); }
-.modal h3 { font-family:'Playfair Display',serif; font-size:1.25rem; font-weight:400; color:var(--navy); margin-bottom:8px; }
-.modal p { color:var(--grey); font-size:0.87rem; margin-bottom:22px; line-height:1.65; font-weight:300; }
-.modal-input { width:100%; padding:11px 15px; border-radius:9px; border:1.5px solid var(--grey-light); font-family:'Inter',sans-serif; font-size:0.92rem; margin-bottom:11px; outline:none; transition:border-color .2s; color:var(--navy); font-weight:300; }
-.modal-input:focus { border-color:var(--accent); }
-.btn-modal { width:100%; padding:13px; background:var(--accent); color:white; border:none; border-radius:10px; font-weight:500; font-size:0.92rem; cursor:pointer; font-family:'Inter',sans-serif; }
-.btn-modal:hover { background:var(--accent-lt); }
-.modal-note { text-align:center; font-size:0.72rem; color:var(--grey); margin-top:10px; }
+:root{--navy:#0f1b3d;--navy-mid:#1a2d5a;--white:#ffffff;--off-white:#f6f8fc;--grey:#7b89a8;--grey-light:#e2e8f4;--grey-mid:#c4cfe6;--accent:#2f72f5;--accent-lt:#5590ff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;font-weight:300;background:var(--white);color:var(--navy);overflow-x:hidden;}
+.page{display:none;min-height:100vh;flex-direction:column;}
+.page.active{display:flex;}
+nav{background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:64px;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.nav-logo-text{font-family:'Playfair Display',serif;font-weight:600;font-size:1.15rem;color:white;}
+.nav-logo-text em{color:var(--accent-lt);font-style:italic;}
+.nav-links{display:flex;align-items:center;gap:28px;}
+.nav-links a{color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.84rem;font-weight:300;cursor:pointer;transition:color .2s;}
+.nav-links a:hover{color:white;}
+.nav-auth{display:flex;align-items:center;gap:12px;}
+.btn-nav-login{color:rgba(255,255,255,0.6);font-size:0.82rem;cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;font-weight:300;}
+.btn-nav-login:hover{color:white;}
+.btn-nav-signup{background:var(--accent);color:white;border:none;padding:8px 18px;border-radius:8px;font-size:0.82rem;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s;}
+.btn-nav-signup:hover{background:var(--accent-lt);}
+.nav-avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:600;}
+.hero{background:var(--navy);padding:100px 52px 90px;flex:1;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;right:-60px;top:-60px;width:520px;height:520px;background:radial-gradient(circle,rgba(47,114,245,0.12) 0%,transparent 65%);border-radius:50%;}
+.hero-inner{max-width:700px;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.6rem);font-weight:400;color:white;line-height:1.18;margin-bottom:24px;}
+.hero p{color:rgba(255,255,255,0.45);font-size:0.97rem;max-width:480px;line-height:1.82;margin-bottom:44px;font-weight:300;}
+.btn-hero{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:white;padding:16px 34px;border-radius:10px;font-weight:500;font-size:1rem;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;}
+.btn-hero:hover{background:var(--accent-lt);transform:translateY(-2px);}
+.hero-stats{display:flex;gap:48px;margin-top:56px;flex-wrap:wrap;padding-top:40px;border-top:1px solid rgba(255,255,255,0.08);justify-content:center;}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:400;color:white;display:block;line-height:1;margin-bottom:4px;}
+.stat-num em{color:var(--accent-lt);font-style:normal;}
+.stat-label{color:rgba(255,255,255,0.4);font-size:0.78rem;}
+.how-section{background:var(--off-white);padding:88px 52px;border-top:1px solid var(--grey-light);}
+.sec-inner{max-width:1100px;margin:0 auto;}
+.sec-eyebrow{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:12px;}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,2.8vw,2.4rem);font-weight:400;color:var(--navy);margin-bottom:52px;line-height:1.22;max-width:440px;}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.step-card{background:white;border:1.5px solid var(--grey-light);border-radius:14px;padding:30px;transition:all .25s;}
+.step-card:hover{border-color:rgba(47,114,245,0.3);transform:translateY(-3px);box-shadow:0 12px 32px rgba(15,27,61,0.07);}
+.step-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:400;color:var(--grey-light);margin-bottom:18px;}
+.step-card h4{font-size:0.9rem;font-weight:500;color:var(--navy);margin-bottom:10px;}
+.step-card p{font-size:0.85rem;color:var(--grey);line-height:1.72;}
+.pro-section{background:var(--navy);padding:88px 52px;}
+.pro-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.pro-left .sec-eyebrow{color:var(--accent-lt);}
+.pro-left .sec-title{color:white;margin-bottom:20px;}
+.pro-left p{color:rgba(255,255,255,0.5);font-size:0.92rem;line-height:1.78;margin-bottom:32px;}
+.pro-feats{list-style:none;margin-bottom:32px;}
+.pro-feats li{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);font-size:0.88rem;}
+.pro-feats li:last-child{border:none;}
+.feat-icon{width:28px;height:28px;background:rgba(47,114,245,0.15);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8rem;}
+.pro-card-right{background:white;border-radius:18px;padding:36px;box-shadow:0 20px 60px rgba(0,0,0,0.25);}
+.pro-plan-name{font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--grey);margin-bottom:6px;}
+.pro-price{font-size:2.8rem;font-weight:300;color:var(--navy);letter-spacing:-2px;line-height:1;margin-bottom:4px;}
+.pro-price-sub{font-size:0.8rem;color:var(--grey);margin-bottom:26px;}
+.pro-card-feats{list-style:none;margin-bottom:26px;}
+.pro-card-feats li{padding:9px 0;font-size:0.86rem;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--grey-light);color:var(--navy);}
+.pro-card-feats li:last-child{border:none;}
+.ck{color:var(--accent);font-weight:600;flex-shrink:0;}
+.btn-pro{width:100%;padding:14px;border-radius:10px;font-weight:600;font-size:0.92rem;cursor:pointer;font-family:'Inter',sans-serif;border:none;background:var(--accent);color:white;transition:all .2s;}
+.btn-pro:hover{background:var(--accent-lt);}
+.btn-free{width:100%;margin-top:10px;padding:12px;border-radius:10px;font-weight:400;font-size:0.88rem;cursor:pointer;font-family:'Inter',sans-serif;border:1.5px solid var(--grey-light);background:transparent;color:var(--grey);transition:all .2s;}
+.btn-free:hover{border-color:var(--navy);color:var(--navy);}
+footer{background:var(--navy);padding:36px 52px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;border-top:1px solid rgba(255,255,255,0.06);flex-shrink:0;}
+.footer-logo{font-family:'Playfair Display',serif;font-weight:400;color:white;font-size:1.15rem;cursor:pointer;}
+.footer-logo em{color:var(--accent-lt);font-style:italic;}
+footer p{color:rgba(255,255,255,0.28);font-size:0.77rem;}
+.footer-links{display:flex;gap:22px;}
+.footer-links a{color:rgba(255,255,255,0.35);text-decoration:none;font-size:0.8rem;cursor:pointer;transition:color .2s;}
+.footer-links a:hover{color:white;}
+.browse-hero{background:var(--navy);padding:72px 52px 64px;flex-shrink:0;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.browse-hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:400;color:white;margin-bottom:14px;}
+.browse-hero p{color:rgba(255,255,255,0.45);font-size:0.92rem;max-width:480px;line-height:1.78;font-weight:300;}
+.browse-grid-wrap{flex:1;background:var(--off-white);padding:52px;}
+.browse-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1100px;margin:0 auto;}
+.tracker-card{background:white;border:1.5px solid var(--grey-light);border-radius:16px;padding:36px 28px;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden;}
+.tracker-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--grey-light);transition:background .25s;}
+.tracker-card:hover{border-color:rgba(47,114,245,0.3);transform:translateY(-4px);box-shadow:0 16px 40px rgba(15,27,61,0.1);}
+.tracker-card:hover::before{background:var(--accent);}
+.tracker-icon{width:52px;height:52px;border-radius:12px;background:var(--off-white);border:1.5px solid var(--grey-light);display:flex;align-items:center;justify-content:center;font-size:1.4rem;}
+.tracker-card h3{font-size:0.95rem;font-weight:500;color:var(--navy);}
+.tracker-card p{font-size:0.82rem;color:var(--grey);line-height:1.65;flex:1;}
+.tracker-arrow{display:flex;align-items:center;justify-content:flex-end;color:var(--grey);font-size:1.2rem;transition:color .2s;}
+.tracker-card:hover .tracker-arrow{color:var(--accent);}
+.tracker-hero{background:var(--navy);padding:60px 52px 52px;flex-shrink:0;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.back-btn{display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,0.5);font-size:0.82rem;cursor:pointer;margin-bottom:24px;transition:color .2s;background:none;border:none;font-family:'Inter',sans-serif;}
+.back-btn:hover{color:white;}
+.tracker-hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3.5vw,2.5rem);font-weight:400;color:white;margin-bottom:10px;}
+.tracker-hero p{color:rgba(255,255,255,0.45);font-size:0.92rem;max-width:480px;line-height:1.7;}
+.tracker-body{flex:1;background:var(--off-white);padding:36px 52px;}
+.tracker-controls{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;max-width:1200px;margin-left:auto;margin-right:auto;}
+.controls-left{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.t-search{padding:9px 14px;border-radius:8px;border:1.5px solid var(--grey-light);font-family:'Inter',sans-serif;font-size:0.85rem;color:var(--navy);outline:none;transition:border-color .2s;background:white;width:220px;}
+.t-search:focus{border-color:var(--accent);}
+.t-select{padding:9px 32px 9px 14px;border-radius:8px;border:1.5px solid var(--grey-light);font-family:'Inter',sans-serif;font-size:0.85rem;color:var(--navy);background:white;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237b89a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+.t-count{font-size:0.78rem;color:var(--grey);}
+.status-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+.stab{padding:6px 14px;border-radius:7px;font-size:0.77rem;cursor:pointer;border:1.5px solid var(--grey-light);background:white;color:var(--grey);transition:all .2s;font-family:'Inter',sans-serif;}
+.stab.active{background:var(--navy);color:white;border-color:var(--navy);}
+.stab:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+.table-wrap{background:white;border-radius:12px;border:1px solid var(--grey-light);overflow:hidden;overflow-x:auto;box-shadow:0 2px 12px rgba(15,27,61,0.05);max-width:1200px;margin:0 auto;}
+table{width:100%;border-collapse:collapse;min-width:800px;}
+thead tr{background:var(--navy);}
+thead th{color:rgba(255,255,255,0.4);font-size:0.63rem;font-weight:500;text-transform:uppercase;letter-spacing:1.2px;padding:12px 14px;text-align:left;white-space:nowrap;}
+thead th:first-child{padding-left:16px;}
+tbody tr{border-bottom:1px solid var(--grey-light);transition:background .12s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:rgba(47,114,245,0.02);}
+td{padding:11px 14px;vertical-align:middle;}
+td:first-child{padding-left:16px;}
+.td-co{font-weight:500;white-space:nowrap;color:var(--navy);font-size:0.83rem;}
+.td-prog{color:var(--navy);font-size:0.81rem;max-width:200px;line-height:1.4;font-weight:300;}
+.sector-cell{color:var(--grey);font-size:0.76rem;white-space:nowrap;}
+.date-cell{color:var(--grey);font-size:0.74rem;white-space:nowrap;}
+.close-ok{font-size:0.77rem;color:var(--navy);}
+.close-urgent{font-size:0.77rem;font-weight:500;color:#b06b00;}
+.close-gone{font-size:0.77rem;color:#b02030;}
+.sp{display:inline-flex;align-items:center;gap:4px;font-size:0.66rem;font-weight:500;padding:3px 9px;border-radius:100px;white-space:nowrap;}
+.sp::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.sp-recent{background:rgba(47,114,245,0.1);color:#2f72f5;}
+.sp-open{background:rgba(15,140,80,0.1);color:#0f8c50;}
+.sp-closing{background:rgba(176,107,0,0.1);color:#b06b00;}
+.sp-closed{background:rgba(176,32,48,0.1);color:#b02030;}
+.apply-btn{background:var(--navy);color:white;border:none;padding:6px 14px;border-radius:6px;font-size:0.72rem;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;white-space:nowrap;}
+.apply-btn:hover{background:var(--accent);}
+.progress-select{appearance:none;-webkit-appearance:none;border:1.5px solid var(--grey-light);border-radius:7px;padding:5px 26px 5px 9px;font-size:0.72rem;font-family:'Inter',sans-serif;color:var(--navy);background:white;cursor:pointer;outline:none;min-width:130px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237b89a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;transition:border-color .2s;}
+.progress-select:focus{border-color:var(--accent);}
+.ps-interested{border-color:#2f72f5;color:#2f72f5;background-color:rgba(47,114,245,0.05);}
+.ps-submitted{border-color:#7c3aed;color:#7c3aed;background-color:rgba(124,58,237,0.05);}
+.ps-inprogress{border-color:#b06b00;color:#b06b00;background-color:rgba(176,107,0,0.05);}
+.ps-accepted{border-color:#0f8c50;color:#0f8c50;background-color:rgba(15,140,80,0.05);}
+.ps-rejected{border-color:#b02030;color:#b02030;background-color:rgba(176,32,48,0.05);}
+.ps-notinterested{border-color:#7b89a8;color:#7b89a8;}
+.login-prompt-cell{font-size:0.72rem;color:var(--grey);white-space:nowrap;}
+.login-prompt-cell a{color:var(--accent);cursor:pointer;text-decoration:underline;}
+.auth-page{flex:1;display:flex;align-items:center;justify-content:center;background:var(--off-white);padding:52px 20px;}
+.auth-card{background:white;border-radius:18px;border:1px solid var(--grey-light);padding:44px 48px;width:100%;max-width:560px;box-shadow:0 4px 24px rgba(15,27,61,0.07);}
+.auth-card h2{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:400;color:var(--navy);margin-bottom:6px;}
+.auth-sub{color:var(--grey);font-size:0.87rem;margin-bottom:32px;line-height:1.6;}
+.auth-sub a{color:var(--accent);cursor:pointer;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.form-group{margin-bottom:14px;display:flex;flex-direction:column;gap:5px;}
+.form-group label{font-size:0.75rem;font-weight:500;color:var(--navy);letter-spacing:0.3px;}
+.form-input{padding:10px 13px;border-radius:8px;border:1.5px solid var(--grey-light);font-family:'Inter',sans-serif;font-size:0.88rem;color:var(--navy);outline:none;transition:border-color .2s;font-weight:300;width:100%;}
+.form-input:focus{border-color:var(--accent);}
+.form-select{padding:10px 13px;border-radius:8px;border:1.5px solid var(--grey-light);font-family:'Inter',sans-serif;font-size:0.88rem;color:var(--navy);outline:none;background:white;cursor:pointer;width:100%;}
+.form-select:focus{border-color:var(--accent);}
+.form-section-title{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin:22px 0 14px;padding-top:18px;border-top:1px solid var(--grey-light);}
+.check-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:22px;margin-top:8px;}
+.check-row input{margin-top:2px;flex-shrink:0;accent-color:var(--accent);}
+.check-row label{font-size:0.81rem;color:var(--grey);line-height:1.55;}
+.check-row label a{color:var(--accent);cursor:pointer;}
+.btn-submit{width:100%;padding:13px;background:var(--accent);color:white;border:none;border-radius:10px;font-weight:500;font-size:0.92rem;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s;}
+.btn-submit:hover{background:var(--accent-lt);}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed;}
+.auth-error{background:rgba(176,32,48,0.08);border:1px solid rgba(176,32,48,0.2);color:#b02030;border-radius:8px;padding:10px 14px;font-size:0.82rem;margin-bottom:16px;display:none;}
+.auth-error.show{display:block;}
+.auth-success{background:rgba(15,140,80,0.08);border:1px solid rgba(15,140,80,0.2);color:#0f8c50;border-radius:8px;padding:10px 14px;font-size:0.82rem;margin-bottom:16px;display:none;}
+.auth-success.show{display:block;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(8,14,35,0.65);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal{background:white;border-radius:18px;padding:38px;max-width:440px;width:92%;position:relative;animation:mIn .2s ease;}
+@keyframes mIn{from{opacity:0;transform:scale(0.96) translateY(10px)}to{opacity:1;transform:none}}
+.modal-x{position:absolute;top:16px;right:16px;background:var(--off-white);border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--grey);}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:400;color:var(--navy);margin-bottom:8px;}
+.modal p{color:var(--grey);font-size:0.87rem;margin-bottom:22px;line-height:1.65;font-weight:300;}
+.modal-input{width:100%;padding:11px 15px;border-radius:9px;border:1.5px solid var(--grey-light);font-family:'Inter',sans-serif;font-size:0.92rem;margin-bottom:11px;outline:none;transition:border-color .2s;color:var(--navy);font-weight:300;}
+.modal-input:focus{border-color:var(--accent);}
+.btn-modal{width:100%;padding:13px;background:var(--accent);color:white;border:none;border-radius:10px;font-weight:500;font-size:0.92rem;cursor:pointer;font-family:'Inter',sans-serif;}
+.btn-modal:hover{background:var(--accent-lt);}
+.modal-note{text-align:center;font-size:0.72rem;color:var(--grey);margin-top:10px;}
 </style>
 </head>
 <body>
 
-<!-- HOME PAGE -->
+<!-- HOME -->
 <div class="page active" id="page-home">
   <nav>
-    <div class="nav-logo" onclick="goHome()">
-      <span class="nav-logo-text">Bio<em>Tracker</em></span>
-    </div>
+    <div class="nav-logo" onclick="goHome()"><span class="nav-logo-text">Bio<em>Tracker</em></span></div>
     <div class="nav-links">
       <a onclick="goHome()">Home</a>
       <a onclick="scrollHow()">How It Works</a>
       <a onclick="goTo('page-browse')">Trackers</a>
       <a onclick="scrollPro()">BioTracker Pro</a>
     </div>
+    <div class="nav-auth" id="nav-auth-home"></div>
   </nav>
-
   <section class="hero">
     <div class="hero-inner">
       <h1>All your life sciences<br>openings in one place.</h1>
@@ -210,31 +204,17 @@ td:first-child { padding-left:20px; }
       </div>
     </div>
   </section>
-
   <section class="how-section" id="how-anchor">
     <div class="sec-inner">
       <div class="sec-eyebrow">How it works</div>
       <h2 class="sec-title">Your shortcut to a life sciences career.</h2>
       <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-num">01</div>
-          <h4>Browse All Roles</h4>
-          <p>Choose your tracker and see every UK opening in one clean table. Filter by sector, type and deadline.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-num">02</div>
-          <h4>Apply Directly</h4>
-          <p>No middleman. Every listing links straight to the official company application portal.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-num">03</div>
-          <h4>Go Pro for Alerts</h4>
-          <p>Upgrade to BioTracker Pro and get instant notifications the moment a new role goes live.</p>
-        </div>
+        <div class="step-card"><div class="step-num">01</div><h4>Browse All Roles</h4><p>Choose your tracker and see every UK opening in one clean table. Filter by sector, type and deadline.</p></div>
+        <div class="step-card"><div class="step-num">02</div><h4>Apply Directly</h4><p>No middleman. Every listing links straight to the official company application portal.</p></div>
+        <div class="step-card"><div class="step-num">03</div><h4>Go Pro for Alerts</h4><p>Upgrade to BioTracker Pro and get instant notifications the moment a new role goes live.</p></div>
       </div>
     </div>
   </section>
-
   <section class="pro-section" id="pro-anchor">
     <div class="pro-inner">
       <div class="pro-left">
@@ -264,7 +244,6 @@ td:first-child { padding-left:20px; }
       </div>
     </div>
   </section>
-
   <footer>
     <div class="footer-logo" onclick="goHome()">Bio<em>Tracker</em></div>
     <p>&copy; 2026 BioTracker &middot; UK Life Sciences Internships &amp; Placements</p>
@@ -272,54 +251,114 @@ td:first-child { padding-left:20px; }
   </footer>
 </div>
 
-<!-- BROWSE PAGE -->
+<!-- SIGN UP -->
+<div class="page" id="page-signup">
+  <nav>
+    <div class="nav-logo" onclick="goHome()"><span class="nav-logo-text">Bio<em>Tracker</em></span></div>
+    <div class="nav-links"><a onclick="goHome()">Home</a><a onclick="goTo('page-browse')">Trackers</a></div>
+    <div class="nav-auth"><button class="btn-nav-login" onclick="goTo('page-login')">Already have an account? Log in</button></div>
+  </nav>
+  <div class="auth-page">
+    <div class="auth-card">
+      <h2>Create your account</h2>
+      <p class="auth-sub">Track your applications and never lose your progress. Already have an account? <a onclick="goTo('page-login')">Log in</a></p>
+      <div class="auth-error" id="signup-error"></div>
+      <div class="auth-success" id="signup-success"></div>
+      <div class="form-section-title" style="border-top:none;padding-top:0;margin-top:0;">About you</div>
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input class="form-input" type="text" id="su-firstname" placeholder="e.g. Hamza"></div>
+        <div class="form-group"><label>Last Name</label><input class="form-input" type="text" id="su-lastname" placeholder="e.g. Shah"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Gender</label>
+          <select class="form-select" id="su-gender">
+            <option value="">Prefer not to say</option>
+            <option>Male</option><option>Female</option><option>Non-binary</option>
+            <option>Prefer to self-describe</option><option>Prefer not to say</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ethnicity</label>
+          <select class="form-select" id="su-ethnicity">
+            <option value="">Prefer not to say</option>
+            <option>Asian or Asian British - Bangladeshi</option>
+            <option>Asian or Asian British - Chinese</option>
+            <option>Asian or Asian British - Indian</option>
+            <option>Asian or Asian British - Pakistani</option>
+            <option>Asian or Asian British - Other</option>
+            <option>Black or Black British - African</option>
+            <option>Black or Black British - Caribbean</option>
+            <option>Black or Black British - Other</option>
+            <option>Mixed - White and Asian</option>
+            <option>Mixed - White and Black African</option>
+            <option>Mixed - White and Black Caribbean</option>
+            <option>Mixed - Other</option>
+            <option>White - British</option><option>White - Irish</option><option>White - Other</option>
+            <option>Other ethnic group</option><option>Prefer not to say</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-section-title">Your studies</div>
+      <div class="form-group"><label>University</label><input class="form-input" type="text" id="su-university" placeholder="e.g. University of Manchester"></div>
+      <div class="form-group"><label>Course / Degree</label><input class="form-input" type="text" id="su-course" placeholder="e.g. BSc Biochemistry"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Course Start Year</label><input class="form-input" type="text" id="su-start" placeholder="e.g. 2023"></div>
+        <div class="form-group"><label>Expected Graduation Year</label><input class="form-input" type="text" id="su-end" placeholder="e.g. 2027"></div>
+      </div>
+      <div class="form-section-title">Account details</div>
+      <div class="form-group"><label>Email Address</label><input class="form-input" type="email" id="su-email" placeholder="your@university.ac.uk"></div>
+      <div class="form-group"><label>Create Password</label><input class="form-input" type="password" id="su-password" placeholder="At least 8 characters"></div>
+      <div class="check-row">
+        <input type="checkbox" id="su-terms">
+        <label for="su-terms">I agree to the <a>Terms and Conditions</a> and <a>Privacy Policy</a>. I understand my data will be used to personalise my BioTracker experience.</label>
+      </div>
+      <button class="btn-submit" id="su-btn" onclick="doSignup()">Create Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="page" id="page-login">
+  <nav>
+    <div class="nav-logo" onclick="goHome()"><span class="nav-logo-text">Bio<em>Tracker</em></span></div>
+    <div class="nav-links"><a onclick="goHome()">Home</a><a onclick="goTo('page-browse')">Trackers</a></div>
+    <div class="nav-auth"><button class="btn-nav-signup" onclick="goTo('page-signup')">Sign up free</button></div>
+  </nav>
+  <div class="auth-page">
+    <div class="auth-card" style="max-width:440px;">
+      <h2>Welcome back</h2>
+      <p class="auth-sub">Log in to track your applications. No account? <a onclick="goTo('page-signup')">Sign up free</a></p>
+      <div class="auth-error" id="login-error"></div>
+      <div class="form-group"><label>Email Address</label><input class="form-input" type="email" id="li-email" placeholder="your@email.com"></div>
+      <div class="form-group"><label>Password</label><input class="form-input" type="password" id="li-password" placeholder="Your password"></div>
+      <button class="btn-submit" id="li-btn" onclick="doLogin()">Log In</button>
+    </div>
+  </div>
+</div>
+
+<!-- BROWSE -->
 <div class="page" id="page-browse">
   <nav>
-    <div class="nav-logo" onclick="goHome()">
-      <span class="nav-logo-text">Bio<em>Tracker</em></span>
-    </div>
+    <div class="nav-logo" onclick="goHome()"><span class="nav-logo-text">Bio<em>Tracker</em></span></div>
     <div class="nav-links">
-      <a onclick="goHome()">Home</a>
-      <a onclick="goHomeHow()">How It Works</a>
-      <a onclick="goTo('page-browse')">Trackers</a>
-      <a onclick="goHomePro()">BioTracker Pro</a>
+      <a onclick="goHome()">Home</a><a onclick="goHomeHow()">How It Works</a>
+      <a onclick="goTo('page-browse')">Trackers</a><a onclick="goHomePro()">BioTracker Pro</a>
     </div>
+    <div class="nav-auth" id="nav-auth-browse"></div>
   </nav>
-
   <div class="browse-hero">
     <h1>Trackers</h1>
     <p>Choose a tracker below to view every UK life sciences opening for that role type, updated daily.</p>
   </div>
-
   <div class="browse-grid-wrap">
     <div class="browse-grid">
-      <div class="tracker-card" onclick="openTracker('spring')">
-        <div class="tracker-icon">&#127807;</div>
-        <h3>Spring Weeks</h3>
-        <p>One-week insight programmes in spring. Perfect for first and second-year students exploring the sector.</p>
-        <div class="tracker-arrow">&rarr;</div>
-      </div>
-      <div class="tracker-card" onclick="openTracker('summer')">
-        <div class="tracker-icon">&#9728;&#65039;</div>
-        <h3>Summer Internships</h3>
-        <p>8-12 week paid internships over the summer. The most popular route into life sciences.</p>
-        <div class="tracker-arrow">&rarr;</div>
-      </div>
-      <div class="tracker-card" onclick="openTracker('placement')">
-        <div class="tracker-icon">&#128300;</div>
-        <h3>Placement Years</h3>
-        <p>12-month industry placements, typically in your third year. Hands-on experience at leading companies.</p>
-        <div class="tracker-arrow">&rarr;</div>
-      </div>
-      <div class="tracker-card" onclick="openTracker('graduate')">
-        <div class="tracker-icon">&#127891;</div>
-        <h3>Graduate Schemes</h3>
-        <p>Structured 2-3 year programmes for recent graduates. Rotational schemes across R&amp;D, commercial and operations.</p>
-        <div class="tracker-arrow">&rarr;</div>
-      </div>
+      <div class="tracker-card" onclick="openTracker('spring')"><div class="tracker-icon">&#127807;</div><h3>Spring Weeks</h3><p>One-week insight programmes. Perfect for first and second-year students exploring the sector.</p><div class="tracker-arrow">&rarr;</div></div>
+      <div class="tracker-card" onclick="openTracker('summer')"><div class="tracker-icon">&#9728;&#65039;</div><h3>Summer Internships</h3><p>8-12 week paid internships over the summer. The most popular route into life sciences.</p><div class="tracker-arrow">&rarr;</div></div>
+      <div class="tracker-card" onclick="openTracker('placement')"><div class="tracker-icon">&#128300;</div><h3>Placement Years</h3><p>12-month industry placements, typically in your third year. Hands-on experience at leading companies.</p><div class="tracker-arrow">&rarr;</div></div>
+      <div class="tracker-card" onclick="openTracker('graduate')"><div class="tracker-icon">&#127891;</div><h3>Graduate Schemes</h3><p>Structured 2-3 year programmes for recent graduates across R&amp;D, commercial and operations.</p><div class="tracker-arrow">&rarr;</div></div>
     </div>
   </div>
-
   <footer>
     <div class="footer-logo" onclick="goHome()">Bio<em>Tracker</em></div>
     <p>&copy; 2026 BioTracker &middot; UK Life Sciences Internships &amp; Placements</p>
@@ -327,36 +366,29 @@ td:first-child { padding-left:20px; }
   </footer>
 </div>
 
-<!-- TRACKER PAGE -->
+<!-- TRACKER -->
 <div class="page" id="page-tracker">
   <nav>
-    <div class="nav-logo" onclick="goHome()">
-      <span class="nav-logo-text">Bio<em>Tracker</em></span>
-    </div>
+    <div class="nav-logo" onclick="goHome()"><span class="nav-logo-text">Bio<em>Tracker</em></span></div>
     <div class="nav-links">
-      <a onclick="goHome()">Home</a>
-      <a onclick="goHomeHow()">How It Works</a>
-      <a onclick="goTo('page-browse')">Trackers</a>
-      <a onclick="goHomePro()">BioTracker Pro</a>
+      <a onclick="goHome()">Home</a><a onclick="goHomeHow()">How It Works</a>
+      <a onclick="goTo('page-browse')">Trackers</a><a onclick="goHomePro()">BioTracker Pro</a>
     </div>
+    <div class="nav-auth" id="nav-auth-tracker"></div>
   </nav>
-
   <div class="tracker-hero">
     <button class="back-btn" onclick="goTo('page-browse')">&larr; Back to Trackers</button>
     <h1 id="tracker-title">Summer Internships</h1>
     <p id="tracker-subtitle">All UK life sciences summer internship opportunities, updated daily.</p>
   </div>
-
   <div class="tracker-body">
     <div class="tracker-controls">
       <div class="controls-left">
         <input class="t-search" type="text" placeholder="Search company or role..." id="t-search" oninput="renderLive()">
         <select class="t-select" id="t-sector" onchange="renderLive()">
           <option value="">All Sectors</option>
-          <option>Biotech</option>
-          <option>Pharmaceutical</option>
-          <option>R&amp;D</option>
-          <option>Life Sciences Consulting</option>
+          <option>Biotech</option><option>Pharmaceutical</option>
+          <option>R&amp;D</option><option>Life Sciences Consulting</option>
         </select>
         <div class="status-tabs">
           <button class="stab active" onclick="setStab(this,'')">All</button>
@@ -372,20 +404,14 @@ td:first-child { padding-left:20px; }
       <table>
         <thead>
           <tr>
-            <th>Company</th>
-            <th>Programme</th>
-            <th>Sector</th>
-            <th>Opens</th>
-            <th>Closes</th>
-            <th>Status</th>
-            <th>Apply</th>
+            <th>Progress</th><th>Company</th><th>Programme</th>
+            <th>Sector</th><th>Opens</th><th>Closes</th><th>Status</th><th>Apply</th>
           </tr>
         </thead>
         <tbody id="tracker-tbody"></tbody>
       </table>
     </div>
   </div>
-
   <footer>
     <div class="footer-logo" onclick="goHome()">Bio<em>Tracker</em></div>
     <p>&copy; 2026 BioTracker &middot; UK Life Sciences Internships &amp; Placements</p>
@@ -393,7 +419,7 @@ td:first-child { padding-left:20px; }
   </footer>
 </div>
 
-<!-- MODAL -->
+<!-- PRO MODAL -->
 <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <button class="modal-x" onclick="closeModal()">&#215;</button>
@@ -401,17 +427,23 @@ td:first-child { padding-left:20px; }
     <p>Be first to know when new life sciences roles go live. Instant alerts, deadline reminders, weekly digest - 19.99 per cycle.</p>
     <input class="modal-input" type="text" placeholder="Your name">
     <input class="modal-input" type="email" placeholder="University email">
-    <button class="btn-modal">Get Instant Alerts - &pound;19.99 / cycle</button>
-    <p class="modal-note">Cancel anytime &middot; Secure payment</p>
+    <button class="btn-modal" onclick="window.open('https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK','_blank')">Get Instant Alerts - &pound;19.99 / cycle</button>
+    <p class="modal-note">Cancel anytime &middot; Secure payment via Stripe</p>
   </div>
 </div>
 
 <script>
+var SUPABASE_URL = 'https://xzyzclpipfgcljvtnuvy.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6eXpjbHBpcGZnY2xqdnRudXZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MTEzNjMsImV4cCI6MjA4ODk4NzM2M30.8O5033EJiJrmKeKanC0ktbnXQ2YGb0Z4OLupEQVRTfU';
+var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 var SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTEmnXfI1Ct423-Mo4T8xd4beKKhCV2fhPRtb9exvrqnzdNPZg2s8BP2tUB4Rvi730y291PQNhLvPmo/pub?gid=0&single=true&output=csv';
 var sheetJobs = {spring:[],summer:[],placement:[],graduate:[]};
 var dataLoaded = false;
 var currentTracker = 'summer';
 var statusFilter = '';
+var currentUser = null;
+var userProgress = {};
 
 var trackerMeta = {
   spring:    {title:'Spring Weeks',       sub:'All UK life sciences spring week insight programmes, updated daily.'},
@@ -420,176 +452,261 @@ var trackerMeta = {
   graduate:  {title:'Graduate Schemes',   sub:'All UK life sciences graduate scheme opportunities, updated daily.'}
 };
 
+var PROGRESS_OPTIONS = [
+  {val:'not applied',         label:'Not Applied'},
+  {val:'interested',          label:'Interested'},
+  {val:'submitted',           label:'Submitted Application'},
+  {val:'assessment',          label:'Online Assessment'},
+  {val:'hireview',            label:'HireView'},
+  {val:'telephone',           label:'Telephone Interview'},
+  {val:'online interview',    label:'Online Interview'},
+  {val:'in person interview', label:'In Person Interview'},
+  {val:'accepted',            label:'Accepted'},
+  {val:'rejected',            label:'Rejected'},
+  {val:'not interested',      label:'Not Interested'}
+];
+
+var PROGRESS_CLASS = {
+  'interested':'ps-interested',
+  'submitted':'ps-submitted',
+  'assessment':'ps-inprogress',
+  'hireview':'ps-inprogress',
+  'telephone':'ps-inprogress',
+  'online interview':'ps-inprogress',
+  'in person interview':'ps-inprogress',
+  'accepted':'ps-accepted',
+  'rejected':'ps-rejected',
+  'not interested':'ps-notinterested'
+};
+
+// Init auth
+sb.auth.getSession().then(function(r) {
+  if(r.data && r.data.session) { currentUser = r.data.session.user; loadUserProgress(); }
+  updateNavAuth();
+});
+sb.auth.onAuthStateChange(function(event, session) {
+  currentUser = session ? session.user : null;
+  if(currentUser) { loadUserProgress(); } else { userProgress = {}; }
+  updateNavAuth();
+  if(dataLoaded) renderLive();
+});
+
+function updateNavAuth() {
+  var ids = ['nav-auth-home','nav-auth-browse','nav-auth-tracker'];
+  ids.forEach(function(id) {
+    var el = document.getElementById(id);
+    if(!el) return;
+    if(currentUser) {
+      var init = (currentUser.email || '?')[0].toUpperCase();
+      el.innerHTML = '<div style="display:flex;align-items:center;gap:10px;"><div class="nav-avatar">'+init+'</div><button class="btn-nav-login" onclick="doLogout()">Log out</button></div>';
+    } else {
+      el.innerHTML = '<button class="btn-nav-login" onclick="goTo(\'page-login\')">Log in</button><button class="btn-nav-signup" onclick="goTo(\'page-signup\')">Sign up free</button>';
+    }
+  });
+}
+
 function goTo(id) {
-  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
-
-function goHome() {
-  goTo('page-home');
-}
-
-function scrollHow() {
-  goTo('page-home');
-  setTimeout(function(){ document.getElementById('how-anchor').scrollIntoView({behavior:'smooth'}); }, 50);
-}
-
-function scrollPro() {
-  goTo('page-home');
-  setTimeout(function(){ document.getElementById('pro-anchor').scrollIntoView({behavior:'smooth'}); }, 50);
-}
-
-function goHomeHow() {
-  goTo('page-home');
-  setTimeout(function(){ document.getElementById('how-anchor').scrollIntoView({behavior:'smooth'}); }, 50);
-}
-
-function goHomePro() {
-  goTo('page-home');
-  setTimeout(function(){ document.getElementById('pro-anchor').scrollIntoView({behavior:'smooth'}); }, 50);
-}
-
-function openModal() {
-  document.getElementById('modal').classList.add('show');
-}
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('show');
-}
-
-function setStab(btn, val) {
-  document.querySelectorAll('.stab').forEach(function(b){ b.classList.remove('active'); });
+function goHome(){goTo('page-home');}
+function scrollHow(){goTo('page-home');setTimeout(function(){document.getElementById('how-anchor').scrollIntoView({behavior:'smooth'});},60);}
+function scrollPro(){goTo('page-home');setTimeout(function(){document.getElementById('pro-anchor').scrollIntoView({behavior:'smooth'});},60);}
+function goHomeHow(){goTo('page-home');setTimeout(function(){document.getElementById('how-anchor').scrollIntoView({behavior:'smooth'});},60);}
+function goHomePro(){goTo('page-home');setTimeout(function(){document.getElementById('pro-anchor').scrollIntoView({behavior:'smooth'});},60);}
+function openModal(){document.getElementById('modal').classList.add('show');}
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+function setStab(btn,val){
+  document.querySelectorAll('.stab').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
-  statusFilter = val;
+  statusFilter=val;
   renderLive();
 }
 
-function spCls(s) {
-  if(s==='recently opened') return 'sp-recent';
-  if(s==='open')            return 'sp-open';
-  if(s==='closing')         return 'sp-closing';
-  return 'sp-closed';
+function doSignup() {
+  var btn=document.getElementById('su-btn');
+  var errEl=document.getElementById('signup-error');
+  var okEl=document.getElementById('signup-success');
+  errEl.classList.remove('show');okEl.classList.remove('show');
+  var email=document.getElementById('su-email').value.trim();
+  var password=document.getElementById('su-password').value;
+  var fname=document.getElementById('su-firstname').value.trim();
+  var lname=document.getElementById('su-lastname').value.trim();
+  var terms=document.getElementById('su-terms').checked;
+  if(!fname||!lname){errEl.textContent='Please enter your first and last name.';errEl.classList.add('show');return;}
+  if(!email){errEl.textContent='Please enter your email address.';errEl.classList.add('show');return;}
+  if(password.length<8){errEl.textContent='Password must be at least 8 characters.';errEl.classList.add('show');return;}
+  if(!terms){errEl.textContent='Please agree to the Terms and Conditions to continue.';errEl.classList.add('show');return;}
+  btn.disabled=true;btn.textContent='Creating account...';
+  sb.auth.signUp({email:email,password:password}).then(function(res) {
+    if(res.error){errEl.textContent=res.error.message;errEl.classList.add('show');btn.disabled=false;btn.textContent='Create Account';return Promise.reject('auth error');}
+    return sb.from('profiles').insert({
+      id:res.data.user.id,first_name:fname,last_name:lname,
+      gender:document.getElementById('su-gender').value,
+      ethnicity:document.getElementById('su-ethnicity').value,
+      university:document.getElementById('su-university').value.trim(),
+      course:document.getElementById('su-course').value.trim(),
+      course_start:document.getElementById('su-start').value.trim(),
+      course_end:document.getElementById('su-end').value.trim()
+    });
+  }).then(function(){
+    okEl.textContent='Account created! Check your email to confirm your address, then log in.';
+    okEl.classList.add('show');btn.textContent='Account Created!';
+  }).catch(function(err){
+    if(err==='auth error')return;
+    errEl.textContent='Something went wrong. Please try again.';
+    errEl.classList.add('show');btn.disabled=false;btn.textContent='Create Account';
+  });
 }
 
-function spLbl(s) {
-  if(s==='recently opened') return 'Recently Opened';
-  if(s==='open')            return 'Open';
-  if(s==='closing')         return 'Closing Soon';
-  return 'Closed';
+function doLogin() {
+  var btn=document.getElementById('li-btn');
+  var errEl=document.getElementById('login-error');
+  errEl.classList.remove('show');
+  var email=document.getElementById('li-email').value.trim();
+  var password=document.getElementById('li-password').value;
+  if(!email||!password){errEl.textContent='Please enter your email and password.';errEl.classList.add('show');return;}
+  btn.disabled=true;btn.textContent='Logging in...';
+  sb.auth.signInWithPassword({email:email,password:password}).then(function(res){
+    if(res.error){errEl.textContent=res.error.message;errEl.classList.add('show');btn.disabled=false;btn.textContent='Log In';}
+    else{btn.disabled=false;btn.textContent='Log In';goTo('page-browse');}
+  });
 }
 
-function closeCls(s) {
-  if(s==='closing') return 'close-urgent';
-  if(s==='closed')  return 'close-gone';
-  return 'close-ok';
+function doLogout() {
+  sb.auth.signOut().then(function(){currentUser=null;userProgress={};updateNavAuth();goHome();});
 }
 
-function typeKey(t) {
-  t = (t||'').toLowerCase().trim();
-  if(t.indexOf('spring')>=0)    return 'spring';
-  if(t.indexOf('summer')>=0)    return 'summer';
-  if(t.indexOf('placement')>=0) return 'placement';
-  if(t.indexOf('graduate')>=0)  return 'graduate';
+function pKey(company,prog){return company+'||'+prog;}
+
+function loadUserProgress() {
+  if(!currentUser)return;
+  sb.from('progress').select('*').eq('user_id',currentUser.id).then(function(res){
+    if(res.data){
+      userProgress={};
+      res.data.forEach(function(row){userProgress[pKey(row.company,row.programme)]=row.status;});
+      if(dataLoaded)renderLive();
+    }
+  });
+}
+
+function saveProgress(company,prog,status) {
+  if(!currentUser)return;
+  sb.from('progress').upsert({
+    user_id:currentUser.id,company:company,programme:prog,
+    tracker_type:currentTracker,status:status,
+    updated_at:new Date().toISOString()
+  },{onConflict:'user_id,company,programme'});
+}
+
+function onProgressChange(sel,company,prog) {
+  var val=sel.value;
+  userProgress[pKey(company,prog)]=val;
+  sel.className='progress-select';
+  if(PROGRESS_CLASS[val])sel.classList.add(PROGRESS_CLASS[val]);
+  saveProgress(company,prog,val);
+}
+
+function buildProgressCell(company,prog) {
+  if(!currentUser) {
+    return '<td class="login-prompt-cell"><a onclick="goTo(\'page-login\')">Log in</a> to track</td>';
+  }
+  var key=pKey(company,prog);
+  var current=userProgress[key]||'not applied';
+  var cls=PROGRESS_CLASS[current]?' '+PROGRESS_CLASS[current]:'';
+  var opts=PROGRESS_OPTIONS.map(function(o){
+    return '<option value="'+o.val+'"'+(o.val===current?' selected':'')+'>'+o.label+'</option>';
+  }).join('');
+  var sc=company.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  var sp=prog.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  return '<td><select class="progress-select'+cls+'" onchange="onProgressChange(this,\''+sc+'\',\''+sp+'\')">'+opts+'</select></td>';
+}
+
+function typeKey(t){
+  t=(t||'').toLowerCase().trim();
+  if(t.indexOf('spring')>=0)return 'spring';
+  if(t.indexOf('summer')>=0)return 'summer';
+  if(t.indexOf('placement')>=0)return 'placement';
+  if(t.indexOf('graduate')>=0)return 'graduate';
   return null;
 }
 
-function parseCSV(text) {
-  var lines = text.trim().split('\n');
-  var headers = lines[0].split(',').map(function(h){ return h.replace(/^"|"$/g,'').trim(); });
+function parseCSV(text){
+  var lines=text.trim().split('\n');
+  var headers=lines[0].split(',').map(function(h){return h.replace(/^"|"$/g,'').trim();});
   return lines.slice(1).map(function(line){
-    var cols=[], cur='', inQ=false;
-    for(var i=0; i<line.length; i++){
-      var c = line[i];
-      if(c==='"'){ inQ=!inQ; }
-      else if(c===',' && !inQ){ cols.push(cur.trim()); cur=''; }
-      else { cur+=c; }
+    var cols=[],cur='',inQ=false;
+    for(var i=0;i<line.length;i++){
+      var c=line[i];
+      if(c==='"'){inQ=!inQ;}else if(c===','&&!inQ){cols.push(cur.trim());cur='';}else{cur+=c;}
     }
     cols.push(cur.trim());
     var obj={};
-    headers.forEach(function(h,i){ obj[h]=(cols[i]||'').replace(/^"|"$/g,'').trim(); });
+    headers.forEach(function(h,i){obj[h]=(cols[i]||'').replace(/^"|"$/g,'').trim();});
     return obj;
-  }).filter(function(r){ return r.Company && r.Company.length>0; });
+  }).filter(function(r){return r.Company&&r.Company.length>0;});
 }
 
-function loadSheet() {
-  dataLoaded = false;
-  document.getElementById('tracker-tbody').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:#7b89a8;font-size:0.85rem;">Loading roles...</td></tr>';
+function loadSheet(){
+  dataLoaded=false;
+  document.getElementById('tracker-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:40px;color:#7b89a8;font-size:0.85rem;">Loading roles...</td></tr>';
   fetch(SHEET_URL)
-    .then(function(r){ return r.text(); })
+    .then(function(r){return r.text();})
     .then(function(text){
-      var rows = parseCSV(text);
-      sheetJobs = {spring:[],summer:[],placement:[],graduate:[]};
+      var rows=parseCSV(text);
+      sheetJobs={spring:[],summer:[],placement:[],graduate:[]};
       rows.forEach(function(r){
-        var key = typeKey(r.Type);
-        if(!key) return;
-        sheetJobs[key].push({
-          company: r.Company||'',
-          prog:    r.Programme||'',
-          sector:  r.Sector||'',
-          opens:   r.Opens||'',
-          closes:  r.Closes||'',
-          status:  (r.Status||'').toLowerCase().trim(),
-          url:     r.URL||''
-        });
+        var key=typeKey(r.Type);if(!key)return;
+        sheetJobs[key].push({company:r.Company||'',prog:r.Programme||'',sector:r.Sector||'',opens:r.Opens||'',closes:r.Closes||'',status:(r.Status||'').toLowerCase().trim(),url:r.URL||''});
       });
-      dataLoaded = true;
-      renderLive();
+      dataLoaded=true;renderLive();
     })
     .catch(function(){
-      document.getElementById('tracker-tbody').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:#7b89a8;font-size:0.85rem;">Could not load roles. Please try again later.</td></tr>';
+      document.getElementById('tracker-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:40px;color:#7b89a8;font-size:0.85rem;">Could not load roles. Please try again later.</td></tr>';
     });
 }
 
-function renderLive() {
-  if(!dataLoaded) return;
-  var search = document.getElementById('t-search').value.toLowerCase();
-  var sector = document.getElementById('t-sector').value;
-  var jobs = sheetJobs[currentTracker] || [];
+function spCls(s){if(s==='recently opened')return 'sp-recent';if(s==='open')return 'sp-open';if(s==='closing')return 'sp-closing';return 'sp-closed';}
+function spLbl(s){if(s==='recently opened')return 'Recently Opened';if(s==='open')return 'Open';if(s==='closing')return 'Closing Soon';return 'Closed';}
+function closeCls(s){if(s==='closing')return 'close-urgent';if(s==='closed')return 'close-gone';return 'close-ok';}
 
-  var filtered = jobs.filter(function(j){
-    var ms = !search || j.company.toLowerCase().indexOf(search)>=0 || j.prog.toLowerCase().indexOf(search)>=0;
-    var mx = !sector || j.sector===sector;
-    var mv = !statusFilter || j.status===statusFilter;
-    return ms && mx && mv;
+function renderLive(){
+  if(!dataLoaded)return;
+  var search=document.getElementById('t-search').value.toLowerCase();
+  var sector=document.getElementById('t-sector').value;
+  var jobs=sheetJobs[currentTracker]||[];
+  var filtered=jobs.filter(function(j){
+    var ms=!search||j.company.toLowerCase().indexOf(search)>=0||j.prog.toLowerCase().indexOf(search)>=0;
+    var mx=!sector||j.sector===sector;
+    var mv=!statusFilter||j.status===statusFilter;
+    return ms&&mx&&mv;
   });
-
-  var countEl = document.getElementById('t-count');
-  countEl.textContent = filtered.length>0 ? (filtered.length+' of '+jobs.length+' roles shown - Updated today') : '';
-
+  document.getElementById('t-count').textContent=filtered.length>0?(filtered.length+' of '+jobs.length+' roles shown - Updated today'):'';
   if(filtered.length===0){
-    var msg = jobs.length===0
-      ? 'No roles are currently listed - check back soon or get Pro alerts to be notified the moment they go live.'
-      : 'No roles match your filters.';
-    document.getElementById('tracker-tbody').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:48px 20px;color:#7b89a8;font-size:0.85rem;line-height:1.7;">'+msg+'</td></tr>';
+    var msg=jobs.length===0?'No roles are currently listed - check back soon or get Pro alerts to be notified the moment they go live.':'No roles match your filters.';
+    document.getElementById('tracker-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:48px 20px;color:#7b89a8;font-size:0.85rem;line-height:1.7;">'+msg+'</td></tr>';
     return;
   }
-
-  document.getElementById('tracker-tbody').innerHTML = filtered.map(function(j){
-    var btn = j.url
-      ? '<button class="apply-btn" onclick="window.open(\''+j.url+'\',\'_blank\')">Apply</button>'
-      : '<button class="apply-btn" style="opacity:0.4;cursor:default;">Soon</button>';
-    return '<tr>'+
-      '<td class="td-co">'+j.company+'</td>'+
-      '<td class="td-prog">'+j.prog+'</td>'+
-      '<td class="sector-cell">'+j.sector+'</td>'+
-      '<td class="date-cell">'+j.opens+'</td>'+
+  document.getElementById('tracker-tbody').innerHTML=filtered.map(function(j){
+    var btn=j.url?'<button class="apply-btn" onclick="window.open(\''+j.url+'\',\'_blank\')">Apply</button>':'<button class="apply-btn" style="opacity:0.4;cursor:default;">Soon</button>';
+    return '<tr>'+buildProgressCell(j.company,j.prog)+
+      '<td class="td-co">'+j.company+'</td><td class="td-prog">'+j.prog+'</td>'+
+      '<td class="sector-cell">'+j.sector+'</td><td class="date-cell">'+j.opens+'</td>'+
       '<td><span class="'+closeCls(j.status)+'">'+j.closes+'</span></td>'+
       '<td><span class="sp '+spCls(j.status)+'">'+spLbl(j.status)+'</span></td>'+
-      '<td>'+btn+'</td>'+
-      '</tr>';
+      '<td>'+btn+'</td></tr>';
   }).join('');
 }
 
-function openTracker(type) {
-  currentTracker = type;
-  statusFilter = '';
-  document.getElementById('t-search').value = '';
-  document.getElementById('t-sector').value = '';
-  document.querySelectorAll('.stab').forEach(function(b){ b.classList.remove('active'); });
+function openTracker(type){
+  currentTracker=type;statusFilter='';
+  document.getElementById('t-search').value='';
+  document.getElementById('t-sector').value='';
+  document.querySelectorAll('.stab').forEach(function(b){b.classList.remove('active');});
   document.querySelectorAll('.stab')[0].classList.add('active');
-  document.getElementById('tracker-title').textContent    = trackerMeta[type].title;
-  document.getElementById('tracker-subtitle').textContent = trackerMeta[type].sub;
+  document.getElementById('tracker-title').textContent=trackerMeta[type].title;
+  document.getElementById('tracker-subtitle').textContent=trackerMeta[type].sub;
   goTo('page-tracker');
   loadSheet();
 }
