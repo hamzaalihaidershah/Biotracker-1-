@@ -428,11 +428,9 @@ td:first-child{padding-left:16px;}
   <div class="modal">
     <button class="modal-x" onclick="closeModal()">&#215;</button>
     <h3>Get BioTracker Pro</h3>
-    <p>Be first to know when new life sciences roles go live. Instant alerts, deadline reminders, weekly digest - 19.99 per cycle.</p>
-    <input class="modal-input" type="text" placeholder="Your name">
-    <input class="modal-input" type="email" placeholder="Email">
-    <a href="https://buy.stripe.com/dRmdRa5vzdI08BbfJ09ws00" target="_blank" style="display:block;width:100%;padding:13px;background:var(--accent);color:white;border:none;border-radius:10px;font-weight:500;font-size:0.92rem;cursor:pointer;font-family:Inter,sans-serif;text-align:center;text-decoration:none;box-sizing:border-box;">Get Instant Alerts - &pound;19.99 / cycle</a>
-    <p class="modal-note">Cancel anytime &middot; Secure payment via Stripe</p>
+    <p>Be first to know when new life sciences roles go live. Instant alerts, deadline reminders, weekly digest - &pound;19.99 per cycle.</p>
+    <a href="https://buy.stripe.com/dRmdRa5vzdI08BbfJ09ws00" target="_blank" style="display:block;width:100%;padding:14px;background:var(--accent);color:white;border-radius:10px;font-weight:500;font-size:0.95rem;font-family:Inter,sans-serif;text-align:center;text-decoration:none;box-sizing:border-box;margin-top:8px;">Get Instant Alerts - &pound;19.99 / cycle &rarr;</a>
+    <p class="modal-note">Secure payment via Stripe &middot; Cancel anytime</p>
   </div>
 </div>
 
@@ -596,16 +594,27 @@ function loadUserProgress() {
 
 function saveProgress(company,prog,status) {
   if(!currentUser)return;
-  sb.from('progress').upsert({
-    user_id:currentUser.id,
-    company:company,
-    programme:prog,
-    tracker_type:currentTracker,
-    status:status,
-    updated_at:new Date().toISOString()
-  },{onConflict:'user_id,company,programme'}).then(function(res){
-    if(res.error){console.error('Save failed:',res.error.message);}
-  });
+  // Delete existing row first, then insert fresh - avoids upsert conflict issues
+  sb.from('progress')
+    .delete()
+    .eq('user_id',currentUser.id)
+    .eq('company',company)
+    .eq('programme',prog)
+    .then(function(){
+      return sb.from('progress').insert({
+        user_id:currentUser.id,
+        company:company,
+        programme:prog,
+        tracker_type:currentTracker,
+        status:status,
+        updated_at:new Date().toISOString()
+      });
+    })
+    .then(function(res){
+      if(res.error){console.error('Save failed:',res.error.message);}
+      else{console.log('Saved:',company,prog,status);}
+    })
+    .catch(function(e){console.error('Save error:',e);});
 }
 
 function onProgressChange(sel,company,prog) {
