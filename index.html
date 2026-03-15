@@ -247,7 +247,7 @@ td:first-child{padding-left:16px;}
   <footer>
     <div class="footer-logo" onclick="goHome()">Bio<em>Tracker</em></div>
     <p>&copy; 2026 BioTracker &middot; UK Life Sciences Internships &amp; Placements</p>
-    <div class="footer-links"><a>About</a><a>Contact</a><a>Privacy</a></div>
+    <div class="footer-links"><a>Contact</a><a>Terms and Conditions</a><a>Privacy Policy</a></div>
   </footer>
 </div>
 
@@ -366,7 +366,7 @@ td:first-child{padding-left:16px;}
   <footer>
     <div class="footer-logo" onclick="goHome()">Bio<em>Tracker</em></div>
     <p>&copy; 2026 BioTracker &middot; UK Life Sciences Internships &amp; Placements</p>
-    <div class="footer-links"><a>About</a><a>Contact</a><a>Privacy</a></div>
+    <div class="footer-links"><a>Contact</a><a>Terms and Conditions</a><a>Privacy Policy</a></div>
   </footer>
 </div>
 
@@ -391,8 +391,8 @@ td:first-child{padding-left:16px;}
         <input class="t-search" type="text" placeholder="Search company or role..." id="t-search" oninput="renderLive()">
         <select class="t-select" id="t-sector" onchange="renderLive()">
           <option value="">All Sectors</option>
-          <option>Biotech</option><option>Pharmaceutical</option>
-          <option>R&amp;D</option><option>Life Sciences Consulting</option>
+          <option>Biotechnology</option><option>Pharmaceutical</option>
+          <option>Research and Development</option><option>Life Sciences Consulting</option>
         </select>
         <div class="status-tabs">
           <button class="stab active" onclick="setStab(this,'')">All</button>
@@ -419,7 +419,7 @@ td:first-child{padding-left:16px;}
   <footer>
     <div class="footer-logo" onclick="goHome()">Bio<em>Tracker</em></div>
     <p>&copy; 2026 BioTracker &middot; UK Life Sciences Internships &amp; Placements</p>
-    <div class="footer-links"><a>About</a><a>Contact</a><a>Privacy</a></div>
+    <div class="footer-links"><a>Contact</a><a>Terms and Conditions</a><a>Privacy Policy</a></div>
   </footer>
 </div>
 
@@ -430,7 +430,7 @@ td:first-child{padding-left:16px;}
     <h3>Get BioTracker Pro</h3>
     <p>Be first to know when new life sciences roles go live. Instant alerts, deadline reminders, weekly digest - &pound;19.99 per cycle.</p>
     <a href="https://buy.stripe.com/dRmdRa5vzdI08BbfJ09ws00" target="_blank" style="display:block;width:100%;padding:14px;background:var(--accent);color:white;border-radius:10px;font-weight:500;font-size:0.95rem;font-family:Inter,sans-serif;text-align:center;text-decoration:none;box-sizing:border-box;margin-top:8px;">Get Instant Alerts - &pound;19.99 / cycle &rarr;</a>
-    <p class="modal-note">Secure payment via Stripe &middot; Cancel anytime</p>
+    <p class="modal-note">Secure payment via Stripe</p>
   </div>
 </div>
 
@@ -594,28 +594,23 @@ function loadUserProgress() {
 
 function saveProgress(company,prog,status) {
   if(!currentUser)return;
-  // Delete existing row first, then insert fresh - avoids upsert conflict issues
-  sb.from('progress')
-    .delete()
-    .eq('user_id',currentUser.id)
-    .eq('company',company)
-    .eq('programme',prog)
-    .then(function(){
-      return sb.from('progress').insert({
-        user_id:currentUser.id,
-        company:company,
-        programme:prog,
-        tracker_type:currentTracker,
-        status:status,
-        updated_at:new Date().toISOString()
-      });
-    })
-    .then(function(res){
-      if(res.error){console.error('Save failed:',res.error.message);}
-      else{console.log('Saved:',company,prog,status);}
-    })
-    .catch(function(e){console.error('Save error:',e);});
+  // First ensure a profile row exists for this user
+  sb.from('profiles').upsert({id:currentUser.id},{onConflict:'id'}).then(function(){
+    // Now upsert the progress row
+    return sb.from('progress').upsert({
+      user_id:currentUser.id,
+      company:company,
+      programme:prog,
+      tracker_type:currentTracker,
+      status:status,
+      updated_at:new Date().toISOString()
+    },{onConflict:'user_id,company,programme'});
+  }).then(function(res){
+    if(res && res.error){console.error('Save failed:',res.error.message);}
+    else{console.log('Saved OK:',company,status);}
+  }).catch(function(e){console.error('Save error:',e);});
 }
+
 
 function onProgressChange(sel,company,prog) {
   var val=sel.value;
@@ -733,7 +728,7 @@ function renderLive(){
   });
   document.getElementById('t-count').textContent=filtered.length>0?(filtered.length+' of '+jobs.length+' roles shown - Updated today'):'';
   if(filtered.length===0){
-    var msg=jobs.length===0?'No roles are currently listed - check back soon or get Pro alerts to be notified the moment they go live.':'No roles match your filters.';
+    var msg=jobs.length===0?'No roles are currently listed - check back soon or <a onclick="goHomePro()" style="color:var(--accent);cursor:pointer;font-weight:500;">get BioTracker Pro alerts</a> to be notified the moment they go live.':'No roles match your filters.';
     document.getElementById('tracker-tbody').innerHTML='<tr><td colspan="9" style="text-align:center;padding:48px 20px;color:#7b89a8;font-size:0.85rem;line-height:1.7;">'+msg+'</td></tr>';
     return;
   }
