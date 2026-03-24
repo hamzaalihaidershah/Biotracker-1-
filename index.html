@@ -349,60 +349,15 @@ td:first-child{padding-left:16px;}
         <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
         Continue with Google
       </button>
-      <button class="btn-social" onclick="doSocialLogin('apple')">
-        <svg width="18" height="18" viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.3-164-39.3c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.5 135.4-317.3 268.4-317.3 99.8 0 162.6 65.7 218.9 65.7 53.5 0 126.4-70 237.8-70 38.3 0 138.9 3.5 209.4 114.7zm-156.7-174.5c43.1-50.9 73.4-121.6 73.4-192.3 0-9.7-.6-19.5-2.3-27.5-69.4 2.7-151.8 46.4-201 103.1-37.4 42.1-73.4 112.8-73.4 184.5 0 10.4 1.7 20.7 2.9 24 4.1.6 10.7 1.7 17.4 1.7 62.3 0 139-41.6 183-93.5z" fill="black"/></svg>
-        Continue with Apple
-      </button>
       <div class="social-divider"><span>or sign up with email</span></div>
-      <div class="form-section-title" style="border-top:none;padding-top:0;margin-top:0;">About you</div>
-      <div class="form-row">
+            <div class="form-row">
         <div class="form-group"><label>First Name</label><input class="form-input" type="text" id="su-firstname" placeholder=""></div>
         <div class="form-group"><label>Last Name</label><input class="form-input" type="text" id="su-lastname" placeholder=""></div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Gender</label>
-          <select class="form-select" id="su-gender">
-            <option value="">Select...</option>
-            <option>Male</option>
-            <option>Female</option>
-            <option>Prefer not to say</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Ethnicity</label>
-          <select class="form-select" id="su-ethnicity">
-            <option value="">Prefer not to say</option>
-            <option>Asian or Asian British - Bangladeshi</option>
-            <option>Asian or Asian British - Chinese</option>
-            <option>Asian or Asian British - Indian</option>
-            <option>Asian or Asian British - Pakistani</option>
-            <option>Asian or Asian British - Other</option>
-            <option>Black or Black British - African</option>
-            <option>Black or Black British - Caribbean</option>
-            <option>Black or Black British - Other</option>
-            <option>Mixed - White and Asian</option>
-            <option>Mixed - White and Black African</option>
-            <option>Mixed - White and Black Caribbean</option>
-            <option>Mixed - Other</option>
-            <option>White - British</option>
-            <option>White - Irish</option>
-            <option>White - Other</option>
-            <option>Other ethnic group</option>
-            <option>Prefer not to say</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-section-title">Your studies</div>
-      <div class="form-group"><label>University</label><input class="form-input" type="text" id="su-university" placeholder="e.g. University of Manchester"></div>
-      <div class="form-group"><label>Course / Degree</label><input class="form-input" type="text" id="su-course" placeholder="e.g. BSc Biochemistry"></div>
-      <div class="form-row">
-        <div class="form-group"><label>Course Start Year</label><input class="form-input" type="text" id="su-start" placeholder="e.g. 2023"></div>
-        <div class="form-group"><label>Expected Graduation Year</label><input class="form-input" type="text" id="su-end" placeholder="e.g. 2027"></div>
-      </div>
-      <div class="form-section-title">Account details</div>
+      <div class="form-group"><label>Phone Number</label><input class="form-input" type="tel" id="su-phone" placeholder="+44 7700 000000"></div>
       <div class="form-group"><label>Email Address</label><input class="form-input" type="email" id="su-email" placeholder="your@email.com"></div>
       <div class="form-group"><label>Create Password</label><input class="form-input" type="password" id="su-password" placeholder="At least 8 characters"></div>
+      <div class="form-group"><label>Confirm Password</label><input class="form-input" type="password" id="su-confirm-password" placeholder="Re-enter your password"></div>
       <div class="check-row">
         <input type="checkbox" id="su-terms">
         <label for="su-terms">I agree to the <a onclick="goTo('page-terms')">Terms and Conditions</a> and Privacy Policy. I understand my data will be used to personalise my BioTracker experience.</label>
@@ -434,10 +389,6 @@ td:first-child{padding-left:16px;}
       <button class="btn-social" onclick="doSocialLogin('google')">
         <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
         Continue with Google
-      </button>
-      <button class="btn-social" onclick="doSocialLogin('apple')">
-        <svg width="18" height="18" viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.3-164-39.3c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.5 135.4-317.3 268.4-317.3 99.8 0 162.6 65.7 218.9 65.7 53.5 0 126.4-70 237.8-70 38.3 0 138.9 3.5 209.4 114.7zm-156.7-174.5c43.1-50.9 73.4-121.6 73.4-192.3 0-9.7-.6-19.5-2.3-27.5-69.4 2.7-151.8 46.4-201 103.1-37.4 42.1-73.4 112.8-73.4 184.5 0 10.4 1.7 20.7 2.9 24 4.1.6 10.7 1.7 17.4 1.7 62.3 0 139-41.6 183-93.5z" fill="black"/></svg>
-        Continue with Apple
       </button>
       <div class="social-divider"><span>or log in with email</span></div>
       <button class="btn-submit" id="li-btn" onclick="doLogin()">Log In</button>
@@ -561,7 +512,7 @@ td:first-child{padding-left:16px;}
         <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">7. Changes</h3><p>These terms may be updated at any time. Continued use of BioTracker constitutes acceptance of the latest version.</p></div>
         <div>
           <h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">8. Contact</h3>
-          <p style="margin-bottom:6px;"><strong>Email:</strong> <a href="mailto:info@biotracker.uk" style="color:var(--accent);">info@biotracker.uk</a></p>
+          <p style="margin-bottom:6px;"><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#a7cec9c1c8e7c5cec8d3d5c6c4ccc2d589d2cc" style="color:var(--accent);"><span class="__cf_email__" data-cfemail="71181f171e3113181e050310121a14035f041a">[email&#160;protected]</span></a></p>
           <p><strong>Phone number:</strong> +44 7458 319031</p>
         </div>
       </div>
@@ -596,7 +547,7 @@ td:first-child{padding-left:16px;}
     <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px;">
       <div style="display:flex;align-items:center;gap:14px;font-size:0.88rem;color:var(--navy);padding:12px 16px;background:var(--off-white);border-radius:10px;">
         <span style="font-weight:600;color:var(--grey);min-width:100px;">Email</span>
-        <a href="mailto:info@biotracker.uk" style="color:var(--accent);text-decoration:none;">info@biotracker.uk</a>
+        <a href="/cdn-cgi/l/email-protection#365f58505976545f59424457555d534418435d" style="color:var(--accent);text-decoration:none;"><span class="__cf_email__" data-cfemail="573e39313817353e38232536343c322579223c">[email&#160;protected]</span></a>
       </div>
       <div style="display:flex;align-items:center;gap:14px;font-size:0.88rem;color:var(--navy);padding:12px 16px;background:var(--off-white);border-radius:10px;">
         <span style="font-weight:600;color:var(--grey);min-width:100px;">Phone number</span>
@@ -606,7 +557,7 @@ td:first-child{padding-left:16px;}
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 var SUPABASE_URL = 'https://xzyzclpipfgcljvtnuvy.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6eXpjbHBpcGZnY2xqdnRudXZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MTEzNjMsImV4cCI6MjA4ODk4NzM2M30.8O5033EJiJrmKeKanC0ktbnXQ2YGb0Z4OLupEQVRTfU';
 var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -737,34 +688,29 @@ function doSignup() {
   var errEl=document.getElementById('signup-error');
   var okEl=document.getElementById('signup-success');
   errEl.classList.remove('show');okEl.classList.remove('show');
-  var email=document.getElementById('su-email').value.trim();
-  var password=document.getElementById('su-password').value;
   var fname=document.getElementById('su-firstname').value.trim();
   var lname=document.getElementById('su-lastname').value.trim();
+  var phone=document.getElementById('su-phone').value.trim();
+  var email=document.getElementById('su-email').value.trim();
+  var password=document.getElementById('su-password').value;
+  var confirm=document.getElementById('su-confirm-password').value;
   var terms=document.getElementById('su-terms').checked;
   if(!fname||!lname){errEl.textContent='Please enter your first and last name.';errEl.classList.add('show');return;}
+  if(!phone){errEl.textContent='Please enter your phone number.';errEl.classList.add('show');return;}
   if(!email){errEl.textContent='Please enter your email address.';errEl.classList.add('show');return;}
   if(password.length<8){errEl.textContent='Password must be at least 8 characters.';errEl.classList.add('show');return;}
+  if(password!==confirm){errEl.textContent='Passwords do not match.';errEl.classList.add('show');return;}
   if(!terms){errEl.textContent='Please agree to the Terms and Conditions to continue.';errEl.classList.add('show');return;}
   btn.disabled=true;btn.textContent='Creating account...';
   sb.auth.signUp({email:email,password:password}).then(function(res) {
     if(res.error){errEl.textContent=res.error.message;errEl.classList.add('show');btn.disabled=false;btn.textContent='Create Account';return Promise.reject('auth error');}
-    return sb.from('profiles').insert({
-      id:res.data.user.id,first_name:fname,last_name:lname,
-      gender:document.getElementById('su-gender').value,
-      ethnicity:document.getElementById('su-ethnicity').value,
-      university:document.getElementById('su-university').value.trim(),
-      course:document.getElementById('su-course').value.trim(),
-      course_start:document.getElementById('su-start').value.trim(),
-      course_end:document.getElementById('su-end').value.trim()
-    });
+    return sb.from('profiles').insert({id:res.data.user.id,first_name:fname,last_name:lname,phone:phone});
   }).then(function(){
-    okEl.textContent='Account created! Log in below to get started.';
-    okEl.classList.add('show');btn.textContent='Account Created!';
-  }).catch(function(err){
-    if(err==='auth error')return;
-    errEl.textContent='Something went wrong. Please try again.';
-    errEl.classList.add('show');btn.disabled=false;btn.textContent='Create Account';
+    okEl.textContent='Account created! Please check your email to confirm your address.';
+    okEl.classList.add('show');btn.disabled=false;btn.textContent='Create Account';
+  }).catch(function(e){
+    if(e!=='auth error'){errEl.textContent='Something went wrong. Please try again.';errEl.classList.add('show');}
+    btn.disabled=false;btn.textContent='Create Account';
   });
 }
 
@@ -1036,15 +982,14 @@ function checkProStatus() {
   if (!currentUser) return;
   sb.from('profiles').select('is_pro').eq('id', currentUser.id).single()
     .then(function(res) {
-      if (res.data && res.data.is_pro) {
+      if       if (res.data && res.data.is_pro) {
         var banner = document.getElementById('pro-status-banner');
         var purchase = document.getElementById('modal-purchase');
         if (banner) banner.classList.add('show');
         if (purchase) purchase.style.display = 'none';
       }
-    }).catch(function(){ /* is_pro column may not exist yet */ });
+    }).catch(function(){});
 }
-
 </script>
 </body>
 </html>
