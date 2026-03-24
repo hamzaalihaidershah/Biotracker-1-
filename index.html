@@ -14,8 +14,6 @@ body{font-family:'Inter',sans-serif;font-weight:300;background:var(--white);colo
 .page.active{display:flex;}
 nav{background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:64px;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;}
 .nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
-
-
 .nav-logo-text{font-family:'Playfair Display',serif;font-weight:600;font-size:1.15rem;color:white;}
 .nav-logo-text em{color:var(--accent-lt);font-style:italic;}
 .nav-links{display:flex;align-items:center;gap:28px;}
@@ -71,7 +69,6 @@ nav{background:var(--navy);display:flex;align-items:center;justify-content:space
 .btn-free:hover{border-color:var(--navy);color:var(--navy);}
 footer{background:var(--navy);padding:36px 52px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;border-top:1px solid rgba(255,255,255,0.06);flex-shrink:0;}
 .footer-logo{display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-weight:400;color:white;font-size:1.15rem;cursor:pointer;}
-
 .footer-logo em{color:var(--accent-lt);font-style:italic;}
 footer p{color:rgba(255,255,255,0.28);font-size:0.77rem;}
 .footer-links{display:flex;gap:22px;}
@@ -180,41 +177,36 @@ td:first-child{padding-left:16px;}
 .modal-note{text-align:center;font-size:0.72rem;color:var(--grey);margin-top:10px;}
 /* Forgot password link */
 
-.social-divider{display:flex;align-items:center;gap:12px;margin:20px 0;}
+.social-divider{display:flex;align-items:center;gap:12px;margin:0 0 18px;}
 .social-divider::before,.social-divider::after{content:'';flex:1;height:1px;background:var(--grey-light);}
-.social-divider span{color:var(--grey);font-size:0.75rem;}
+.social-divider span{color:var(--grey);font-size:0.75rem;white-space:nowrap;}
 .btn-social{width:100%;padding:11px;border-radius:10px;border:1.5px solid var(--grey-light);background:white;display:flex;align-items:center;justify-content:center;gap:10px;font-size:0.88rem;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;color:var(--navy);font-weight:400;margin-bottom:10px;}
 .btn-social:hover{border-color:var(--navy);background:var(--off-white);}
-.btn-social svg{flex-shrink:0;}
 
 
-/* Pro status banner */
-.pro-status-banner{background:linear-gradient(135deg,rgba(47,114,245,0.08),rgba(47,114,245,0.03));border:1.5px solid rgba(47,114,245,0.2);border-radius:14px;padding:28px;text-align:center;margin-bottom:20px;display:none;}
-.pro-status-banner.show{display:block;}
-.pro-status-icon{width:48px;height:48px;background:rgba(15,140,80,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:1.4rem;}
-.pro-status-banner h4{font-size:1rem;font-weight:600;color:var(--navy);margin-bottom:6px;}
-.pro-status-banner p{font-size:0.83rem;color:var(--grey);line-height:1.6;}
-.pro-status-banner .btn-go-dash{display:inline-block;margin-top:14px;padding:10px 24px;background:var(--accent);color:white;border-radius:8px;font-size:0.85rem;font-weight:500;cursor:pointer;border:none;font-family:'Inter',sans-serif;}
-
-/* FAQ section */
 .faq-section{background:var(--off-white);padding:80px 52px;border-top:1px solid var(--grey-light);}
 .faq-inner{max-width:720px;margin:0 auto;}
 .faq-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,2.8vw,2.2rem);font-weight:400;color:var(--navy);margin-bottom:36px;text-align:center;}
-.faq-list{display:flex;flex-direction:column;gap:0;}
-.faq-item{border:1.5px solid var(--grey-light);border-radius:0;background:white;overflow:hidden;}
+.faq-list{display:flex;flex-direction:column;}
+.faq-item{border:1.5px solid var(--grey-light);background:white;overflow:hidden;}
 .faq-item:first-child{border-radius:12px 12px 0 0;}
 .faq-item:last-child{border-radius:0 0 12px 12px;}
 .faq-item+.faq-item{border-top:none;}
 .faq-q{width:100%;background:none;border:none;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.92rem;font-weight:500;color:var(--navy);text-align:left;transition:background .15s;}
-.faq-q:hover{background:var(--off-white);}
-.faq-icon{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--grey-mid);display:flex;align-items:center;justify-content:center;color:var(--grey);font-size:1rem;transition:all .2s;}
+.faq-q:hover{background:rgba(47,114,245,0.03);}
+.faq-icon{flex-shrink:0;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--grey-mid);display:flex;align-items:center;justify-content:center;color:var(--grey);font-size:1.1rem;line-height:1;transition:all .25s;}
 .faq-item.open .faq-icon{background:var(--accent);border-color:var(--accent);color:white;transform:rotate(45deg);}
-.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;}
 .faq-item.open .faq-a{max-height:300px;}
-.faq-a-inner{padding:0 24px 20px;font-size:0.85rem;color:var(--grey);line-height:1.75;}
-@media(max-width:768px){
-  .faq-section{padding:52px 20px;}
-}
+.faq-a-inner{padding:0 24px 20px;font-size:0.85rem;color:var(--grey);line-height:1.78;}
+.pro-status-banner{background:rgba(15,140,80,0.06);border:1.5px solid rgba(15,140,80,0.2);border-radius:14px;padding:28px;text-align:center;display:none;margin-bottom:4px;}
+.pro-status-banner.show{display:block;}
+.pro-check{font-size:2rem;margin-bottom:10px;}
+.pro-status-banner h4{font-size:1rem;font-weight:600;color:var(--navy);margin-bottom:6px;}
+.pro-status-banner p{font-size:0.83rem;color:var(--grey);line-height:1.6;}
+.btn-go-trackers{display:inline-block;margin-top:14px;padding:10px 24px;background:var(--accent);color:white;border-radius:8px;font-size:0.85rem;font-weight:500;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:background .2s;}
+.btn-go-trackers:hover{background:var(--accent-lt);}
+@media(max-width:768px){.faq-section{padding:52px 20px;}}
 
 .forgot-link{display:block;text-align:right;font-size:0.78rem;color:var(--accent);cursor:pointer;margin-top:-8px;margin-bottom:18px;}
 .forgot-link:hover{text-decoration:underline;}
@@ -251,7 +243,7 @@ td:first-child{padding-left:16px;}
   .auth-card{padding:28px 20px;}
   .form-row{grid-template-columns:1fr;}
   .pro-price{font-size:2rem;}
-  
+  .nav-logo-text{font-size:1rem;}
 }
 @media (max-width:480px) {
   .browse-grid{grid-template-columns:1fr;}
@@ -268,14 +260,6 @@ td:first-child{padding-left:16px;}
 <div class="page active" id="page-home">
   <nav>
     <div class="nav-logo" onclick="goHome()">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11 3C8.8 3 7 5.2 7 8L7 21C7 23.8 8.8 26 11 26C13.2 26 15 23.8 15 21L15 8C15 5.2 13.2 3 11 3Z" stroke="white" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-        <line x1="7" y1="10.5" x2="15" y2="10.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="14.5" x2="15" y2="14.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="18.5" x2="15" y2="18.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <circle cx="23" cy="22" r="5" stroke="white" stroke-width="1.7" fill="none"/>
-        <line x1="26.5" y1="25.5" x2="30" y2="29" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      </svg>
       <span class="nav-logo-text">Bio<em>Tracker</em></span>
     </div>
     <div class="nav-links">
@@ -283,7 +267,6 @@ td:first-child{padding-left:16px;}
       <a onclick="scrollHow()">How It Works</a>
       <a onclick="goTo('page-browse')">Trackers</a>
       <a onclick="scrollPro()">BioTracker Pro</a>
-      <a onclick="scrollFaq()">FAQ</a>
     </div>
     <div class="nav-auth" id="nav-auth-home"></div>
   </nav>
@@ -338,66 +321,8 @@ td:first-child{padding-left:16px;}
       </div>
     </div>
   </section>
-
-<!-- FAQ SECTION -->
-<section class="faq-section" id="faq-anchor">
-  <div class="faq-inner">
-    <h2 class="faq-title">Questions &amp; answers</h2>
-    <div class="faq-list">
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Can I cancel my Pro subscription at any time?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a"><div class="faq-a-inner">Yes, completely. You can cancel your BioTracker Pro subscription at any time from your account settings. Once cancelled, you'll keep Pro access until the end of your current billing cycle &mdash; no charges after that.</div></div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          What payment methods do you accept?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a"><div class="faq-a-inner">We accept all major credit and debit cards (Visa, Mastercard, Amex) through Stripe, which is one of the world&rsquo;s most trusted payment processors. Apple Pay and Google Pay are also supported where available.</div></div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Is my payment information secure?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a"><div class="faq-a-inner">Absolutely. BioTracker never stores your card details. All payments are handled entirely by Stripe, which is PCI DSS Level 1 certified &mdash; the highest standard of payment security available. Your data is encrypted end-to-end.</div></div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          What&rsquo;s the difference between the free tracker and Pro?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a"><div class="faq-a-inner">The free tracker lets you browse every UK life sciences role, filter by sector, and track your application progress &mdash; all at no cost. BioTracker Pro adds instant email alerts the moment a new role goes live, deadline reminders so you never miss a closing date, and a weekly digest of all new openings.</div></div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          How quickly do I get access after subscribing to Pro?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a"><div class="faq-a-inner">Instantly. The moment your payment is confirmed, Pro features are activated on your account. You&rsquo;ll receive a confirmation email and your alert preferences will be live straight away.</div></div>
-      </div>
-
-    </div>
-  </div>
-</section>
   <footer>
     <div class="footer-logo" onclick="goHome()">
-      <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11 3C8.8 3 7 5.2 7 8L7 21C7 23.8 8.8 26 11 26C13.2 26 15 23.8 15 21L15 8C15 5.2 13.2 3 11 3Z" stroke="white" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-        <line x1="7" y1="10.5" x2="15" y2="10.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="14.5" x2="15" y2="14.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="18.5" x2="15" y2="18.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <circle cx="23" cy="22" r="5" stroke="white" stroke-width="1.7" fill="none"/>
-        <line x1="26.5" y1="25.5" x2="30" y2="29" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      </svg>
       Bio<em>Tracker</em>
     </div>
     <p>&copy; 2026 BioTracker &middot; UK Life Sciences Internships &amp; Placements</p>
@@ -409,14 +334,6 @@ td:first-child{padding-left:16px;}
 <div class="page" id="page-signup">
   <nav>
     <div class="nav-logo" onclick="goHome()">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11 3C8.8 3 7 5.2 7 8L7 21C7 23.8 8.8 26 11 26C13.2 26 15 23.8 15 21L15 8C15 5.2 13.2 3 11 3Z" stroke="white" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-        <line x1="7" y1="10.5" x2="15" y2="10.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="14.5" x2="15" y2="14.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="18.5" x2="15" y2="18.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <circle cx="23" cy="22" r="5" stroke="white" stroke-width="1.7" fill="none"/>
-        <line x1="26.5" y1="25.5" x2="30" y2="29" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      </svg>
       <span class="nav-logo-text">Bio<em>Tracker</em></span>
     </div>
     <div class="nav-links"><a onclick="goHome()">Home</a><a onclick="goTo('page-browse')">Trackers</a></div>
@@ -433,10 +350,10 @@ td:first-child{padding-left:16px;}
         Continue with Google
       </button>
       <button class="btn-social" onclick="doSocialLogin('apple')">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M14.045 9.52c-.02-2.137 1.745-3.174 1.824-3.225-1-1.455-2.546-1.654-3.09-1.672-1.312-.133-2.57.775-3.235.775-.665 0-1.686-.757-2.775-.737-1.42.02-2.733.826-3.465 2.1-1.48 2.563-.379 6.352 1.063 8.43.707 1.019 1.543 2.158 2.644 2.117 1.063-.042 1.463-.683 2.748-.683 1.286 0 1.643.683 2.762.662 1.143-.02 1.864-1.04 2.562-2.063.813-1.183 1.144-2.334 1.163-2.394-.026-.012-2.226-.852-2.201-3.31z" fill="black"/><path d="M11.906 3.175c.586-.712 .982-1.699.874-2.686-.845.034-1.869.562-2.474 1.274-.543.626-1.019 1.631-.891 2.592.94.073 1.901-.477 2.491-1.18z" fill="black"/></svg>
+        <svg width="18" height="18" viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.3-164-39.3c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.5 135.4-317.3 268.4-317.3 99.8 0 162.6 65.7 218.9 65.7 53.5 0 126.4-70 237.8-70 38.3 0 138.9 3.5 209.4 114.7zm-156.7-174.5c43.1-50.9 73.4-121.6 73.4-192.3 0-9.7-.6-19.5-2.3-27.5-69.4 2.7-151.8 46.4-201 103.1-37.4 42.1-73.4 112.8-73.4 184.5 0 10.4 1.7 20.7 2.9 24 4.1.6 10.7 1.7 17.4 1.7 62.3 0 139-41.6 183-93.5z" fill="black"/></svg>
         Continue with Apple
       </button>
-      <div class="social-divider"><span>or continue with email</span></div>
+      <div class="social-divider"><span>or sign up with email</span></div>
       <div class="form-section-title" style="border-top:none;padding-top:0;margin-top:0;">About you</div>
       <div class="form-row">
         <div class="form-group"><label>First Name</label><input class="form-input" type="text" id="su-firstname" placeholder=""></div>
@@ -499,14 +416,6 @@ td:first-child{padding-left:16px;}
 <div class="page" id="page-login">
   <nav>
     <div class="nav-logo" onclick="goHome()">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11 3C8.8 3 7 5.2 7 8L7 21C7 23.8 8.8 26 11 26C13.2 26 15 23.8 15 21L15 8C15 5.2 13.2 3 11 3Z" stroke="white" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-        <line x1="7" y1="10.5" x2="15" y2="10.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="14.5" x2="15" y2="14.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="18.5" x2="15" y2="18.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <circle cx="23" cy="22" r="5" stroke="white" stroke-width="1.7" fill="none"/>
-        <line x1="26.5" y1="25.5" x2="30" y2="29" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      </svg>
       <span class="nav-logo-text">Bio<em>Tracker</em></span>
     </div>
     <div class="nav-links"><a onclick="goHome()">Home</a><a onclick="goTo('page-browse')">Trackers</a></div>
@@ -521,16 +430,16 @@ td:first-child{padding-left:16px;}
       <div class="form-group"><label>Password</label><input class="form-input" type="password" id="li-password" placeholder="Your password"></div>
       <!-- FORGOT PASSWORD LINK -->
       <a class="forgot-link" onclick="doForgotPassword()">Forgot your password?</a>
+      <div class="auth-success" id="forgot-success" style="margin-bottom:14px;"></div>
       <button class="btn-social" onclick="doSocialLogin('google')">
         <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
         Continue with Google
       </button>
       <button class="btn-social" onclick="doSocialLogin('apple')">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M14.045 9.52c-.02-2.137 1.745-3.174 1.824-3.225-1-1.455-2.546-1.654-3.09-1.672-1.312-.133-2.57.775-3.235.775-.665 0-1.686-.757-2.775-.737-1.42.02-2.733.826-3.465 2.1-1.48 2.563-.379 6.352 1.063 8.43.707 1.019 1.543 2.158 2.644 2.117 1.063-.042 1.463-.683 2.748-.683 1.286 0 1.643.683 2.762.662 1.143-.02 1.864-1.04 2.562-2.063.813-1.183 1.144-2.334 1.163-2.394-.026-.012-2.226-.852-2.201-3.31z" fill="black"/><path d="M11.906 3.175c.586-.712 .982-1.699.874-2.686-.845.034-1.869.562-2.474 1.274-.543.626-1.019 1.631-.891 2.592.94.073 1.901-.477 2.491-1.18z" fill="black"/></svg>
+        <svg width="18" height="18" viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.3-164-39.3c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.5 135.4-317.3 268.4-317.3 99.8 0 162.6 65.7 218.9 65.7 53.5 0 126.4-70 237.8-70 38.3 0 138.9 3.5 209.4 114.7zm-156.7-174.5c43.1-50.9 73.4-121.6 73.4-192.3 0-9.7-.6-19.5-2.3-27.5-69.4 2.7-151.8 46.4-201 103.1-37.4 42.1-73.4 112.8-73.4 184.5 0 10.4 1.7 20.7 2.9 24 4.1.6 10.7 1.7 17.4 1.7 62.3 0 139-41.6 183-93.5z" fill="black"/></svg>
         Continue with Apple
       </button>
-      <div class="social-divider"><span>or continue with email</span></div>
-      <div class="auth-success" id="forgot-success" style="margin-bottom:14px;"></div>
+      <div class="social-divider"><span>or log in with email</span></div>
       <button class="btn-submit" id="li-btn" onclick="doLogin()">Log In</button>
     </div>
   </div>
@@ -540,14 +449,6 @@ td:first-child{padding-left:16px;}
 <div class="page" id="page-browse">
   <nav>
     <div class="nav-logo" onclick="goHome()">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11 3C8.8 3 7 5.2 7 8L7 21C7 23.8 8.8 26 11 26C13.2 26 15 23.8 15 21L15 8C15 5.2 13.2 3 11 3Z" stroke="white" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-        <line x1="7" y1="10.5" x2="15" y2="10.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="14.5" x2="15" y2="14.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="18.5" x2="15" y2="18.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <circle cx="23" cy="22" r="5" stroke="white" stroke-width="1.7" fill="none"/>
-        <line x1="26.5" y1="25.5" x2="30" y2="29" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      </svg>
       <span class="nav-logo-text">Bio<em>Tracker</em></span>
     </div>
     <div class="nav-links">
@@ -570,14 +471,6 @@ td:first-child{padding-left:16px;}
   </div>
   <footer>
     <div class="footer-logo" onclick="goHome()">
-      <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11 3C8.8 3 7 5.2 7 8L7 21C7 23.8 8.8 26 11 26C13.2 26 15 23.8 15 21L15 8C15 5.2 13.2 3 11 3Z" stroke="white" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-        <line x1="7" y1="10.5" x2="15" y2="10.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="14.5" x2="15" y2="14.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="18.5" x2="15" y2="18.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <circle cx="23" cy="22" r="5" stroke="white" stroke-width="1.7" fill="none"/>
-        <line x1="26.5" y1="25.5" x2="30" y2="29" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      </svg>
       Bio<em>Tracker</em>
     </div>
     <p>&copy; 2026 BioTracker &middot; UK Life Sciences Internships &amp; Placements</p>
@@ -589,14 +482,6 @@ td:first-child{padding-left:16px;}
 <div class="page" id="page-tracker">
   <nav>
     <div class="nav-logo" onclick="goHome()">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11 3C8.8 3 7 5.2 7 8L7 21C7 23.8 8.8 26 11 26C13.2 26 15 23.8 15 21L15 8C15 5.2 13.2 3 11 3Z" stroke="white" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-        <line x1="7" y1="10.5" x2="15" y2="10.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="14.5" x2="15" y2="14.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="18.5" x2="15" y2="18.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <circle cx="23" cy="22" r="5" stroke="white" stroke-width="1.7" fill="none"/>
-        <line x1="26.5" y1="25.5" x2="30" y2="29" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      </svg>
       <span class="nav-logo-text">Bio<em>Tracker</em></span>
     </div>
     <div class="nav-links">
@@ -643,14 +528,6 @@ td:first-child{padding-left:16px;}
   </div>
   <footer>
     <div class="footer-logo" onclick="goHome()">
-      <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11 3C8.8 3 7 5.2 7 8L7 21C7 23.8 8.8 26 11 26C13.2 26 15 23.8 15 21L15 8C15 5.2 13.2 3 11 3Z" stroke="white" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-        <line x1="7" y1="10.5" x2="15" y2="10.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="14.5" x2="15" y2="14.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="18.5" x2="15" y2="18.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <circle cx="23" cy="22" r="5" stroke="white" stroke-width="1.7" fill="none"/>
-        <line x1="26.5" y1="25.5" x2="30" y2="29" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      </svg>
       Bio<em>Tracker</em>
     </div>
     <p>&copy; 2026 BioTracker &middot; UK Life Sciences Internships &amp; Placements</p>
@@ -662,14 +539,6 @@ td:first-child{padding-left:16px;}
 <div class="page" id="page-terms">
   <nav>
     <div class="nav-logo" onclick="goHome()">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11 3C8.8 3 7 5.2 7 8L7 21C7 23.8 8.8 26 11 26C13.2 26 15 23.8 15 21L15 8C15 5.2 13.2 3 11 3Z" stroke="white" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-        <line x1="7" y1="10.5" x2="15" y2="10.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="14.5" x2="15" y2="14.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="18.5" x2="15" y2="18.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <circle cx="23" cy="22" r="5" stroke="white" stroke-width="1.7" fill="none"/>
-        <line x1="26.5" y1="25.5" x2="30" y2="29" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      </svg>
       <span class="nav-logo-text">Bio<em>Tracker</em></span>
     </div>
     <div class="nav-links">
@@ -692,7 +561,7 @@ td:first-child{padding-left:16px;}
         <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">7. Changes</h3><p>These terms may be updated at any time. Continued use of BioTracker constitutes acceptance of the latest version.</p></div>
         <div>
           <h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">8. Contact</h3>
-          <p style="margin-bottom:6px;"><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#83eaede5ecc3e1eaecf7f1e2e0e8e6f1adf6e8" style="color:var(--accent);"><span class="__cf_email__" data-cfemail="9ef7f0f8f1defcf7f1eaecfffdf5fbecb0ebf5">[email&#160;protected]</span></a></p>
+          <p style="margin-bottom:6px;"><strong>Email:</strong> <a href="mailto:info@biotracker.uk" style="color:var(--accent);">info@biotracker.uk</a></p>
           <p><strong>Phone number:</strong> +44 7458 319031</p>
         </div>
       </div>
@@ -700,14 +569,6 @@ td:first-child{padding-left:16px;}
   </div>
   <footer>
     <div class="footer-logo" onclick="goHome()">
-      <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11 3C8.8 3 7 5.2 7 8L7 21C7 23.8 8.8 26 11 26C13.2 26 15 23.8 15 21L15 8C15 5.2 13.2 3 11 3Z" stroke="white" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-        <line x1="7" y1="10.5" x2="15" y2="10.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="14.5" x2="15" y2="14.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <line x1="7" y1="18.5" x2="15" y2="18.5" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
-        <circle cx="23" cy="22" r="5" stroke="white" stroke-width="1.7" fill="none"/>
-        <line x1="26.5" y1="25.5" x2="30" y2="29" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      </svg>
       Bio<em>Tracker</em>
     </div>
     <p>&copy; 2026 BioTracker &middot; UK Life Sciences Internships &amp; Placements</p>
@@ -719,20 +580,10 @@ td:first-child{padding-left:16px;}
 <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <button class="modal-x" onclick="closeModal()">&#215;</button>
-    
-<!-- Pro status banner (shown when user has Pro) -->
-<div class="pro-status-banner" id="pro-status-banner">
-  <div class="pro-status-icon">&#10003;</div>
-  <h4>You're on BioTracker Pro</h4>
-  <p>Your subscription is active &mdash; you have full access to instant alerts, deadline reminders and weekly digests.</p>
-  <button class="btn-go-dash" onclick="goTo('page-browse');closeModal()">Go to Trackers &rarr;</button>
-</div>
-    <div id="pro-purchase-content">
     <h3>Get BioTracker Pro</h3>
     <p>Be first to know when new life sciences roles go live. Instant alerts, deadline reminders, weekly digest - &pound;19.99 per cycle.</p>
     <a href="https://buy.stripe.com/dRmdRa5vzdI08BbfJ09ws00" target="_blank" style="display:block;width:100%;padding:14px;background:var(--accent);color:white;border-radius:10px;font-weight:500;font-size:0.95rem;font-family:Inter,sans-serif;text-align:center;text-decoration:none;box-sizing:border-box;margin-top:8px;">Get Instant Alerts - &pound;19.99 / cycle &rarr;</a>
     <p class="modal-note">Secure payment via Stripe</p>
-  </div><!-- end pro-purchase-content -->
   </div>
 </div>
 
@@ -745,7 +596,7 @@ td:first-child{padding-left:16px;}
     <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px;">
       <div style="display:flex;align-items:center;gap:14px;font-size:0.88rem;color:var(--navy);padding:12px 16px;background:var(--off-white);border-radius:10px;">
         <span style="font-weight:600;color:var(--grey);min-width:100px;">Email</span>
-        <a href="/cdn-cgi/l/email-protection#076e69616847656e68737566646c627529726c" style="color:var(--accent);text-decoration:none;"><span class="__cf_email__" data-cfemail="fd94939b92bd9f9492898f9c9e96988fd38896">[email&#160;protected]</span></a>
+        <a href="mailto:info@biotracker.uk" style="color:var(--accent);text-decoration:none;">info@biotracker.uk</a>
       </div>
       <div style="display:flex;align-items:center;gap:14px;font-size:0.88rem;color:var(--navy);padding:12px 16px;background:var(--off-white);border-radius:10px;">
         <span style="font-weight:600;color:var(--grey);min-width:100px;">Phone number</span>
@@ -755,7 +606,7 @@ td:first-child{padding-left:16px;}
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 var SUPABASE_URL = 'https://xzyzclpipfgcljvtnuvy.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6eXpjbHBpcGZnY2xqdnRudXZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MTEzNjMsImV4cCI6MjA4ODk4NzM2M30.8O5033EJiJrmKeKanC0ktbnXQ2YGb0Z4OLupEQVRTfU';
 var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -827,30 +678,30 @@ function updateNavAuth() {
   });
 }
 
-function goTo(id, skipHistory) {
-  if (!skipHistory) {
+function goTo(id, pushHistory) {
+  if(pushHistory !== false) {
     history.pushState({page: id}, '', '#' + id);
   }
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
-  var el = document.getElementById(id);
-  if (el) { el.classList.add('active'); }
-  window.scrollTo(0, 0);
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
 }
 window.addEventListener('popstate', function(e) {
-  var page = (e.state && e.state.page) ? e.state.page : 'page-home';
-  goTo(page, true);
+  if(e.state && e.state.page) {
+    goTo(e.state.page, false);
+  } else {
+    goTo('page-home', false);
+  }
 });
-if (!window.location.hash) {
-  history.replaceState({page: 'page-home'}, '', '#page-home');
-}
+// Set initial history state
+history.replaceState({page: 'page-home'}, '', '#page-home');
 function goHome(){goTo('page-home');}
 function scrollHow(){goTo('page-home');setTimeout(function(){document.getElementById('how-anchor').scrollIntoView({behavior:'smooth'});},60);}
 function scrollPro(){goTo('page-home');setTimeout(function(){document.getElementById('pro-anchor').scrollIntoView({behavior:'smooth'});},60);}
 function goHomeHow(){goTo('page-home');setTimeout(function(){document.getElementById('how-anchor').scrollIntoView({behavior:'smooth'});},60);}
 function goHomePro(){goTo('page-home');setTimeout(function(){document.getElementById('pro-anchor').scrollIntoView({behavior:'smooth'});},60);}
-function scrollFaq(){goTo('page-home');setTimeout(function(){var el=document.getElementById('faq-anchor');if(el)el.scrollIntoView({behavior:'smooth'});},60);}
 function showContact(){document.getElementById('contact-modal').classList.add('show');}
-function openModal(){document.getElementById('modal').classList.add('show');checkProStatus();}
+function openModal(){document.getElementById('modal').classList.add('show');}
 function closeModal(){document.getElementById('modal').classList.remove('show');}
 function setStab(btn,val){
   document.querySelectorAll('.stab').forEach(function(b){b.classList.remove('active');});
@@ -1145,4 +996,55 @@ function openTracker(type){
   currentTracker=type;statusFilter='';
   document.getElementById('t-search').value='';
   document.getElementById('t-sector').value='';
-  documen
+  document.querySelectorAll('.stab').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.stab')[0].classList.add('active');
+  document.getElementById('tracker-title').textContent=trackerMeta[type].title;
+  document.getElementById('tracker-subtitle').textContent=trackerMeta[type].sub;
+  goTo('page-tracker');
+  loadSheet();
+}
+
+// ── SOCIAL LOGIN via Supabase OAuth ──
+function doSocialLogin(provider) {
+  sb.auth.signInWithOAuth({
+    provider: provider,
+    options: { redirectTo: window.location.href.split('#')[0] }
+  }).then(function(res) {
+    if (res.error) alert('Could not sign in with ' + provider + '. Please try again.');
+  });
+}
+
+// ── FAQ ACCORDION ──
+function toggleFaq(btn) {
+  var item = btn.parentElement;
+  var isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(el){ el.classList.remove('open'); });
+  if (!isOpen) item.classList.add('open');
+}
+
+// ── FAQ SCROLL ──
+function scrollFaq() {
+  goTo('page-home');
+  setTimeout(function(){
+    var el = document.getElementById('faq-anchor');
+    if (el) el.scrollIntoView({behavior:'smooth'});
+  }, 60);
+}
+
+// ── CHECK PRO STATUS ──
+function checkProStatus() {
+  if (!currentUser) return;
+  sb.from('profiles').select('is_pro').eq('id', currentUser.id).single()
+    .then(function(res) {
+      if (res.data && res.data.is_pro) {
+        var banner = document.getElementById('pro-status-banner');
+        var purchase = document.getElementById('modal-purchase');
+        if (banner) banner.classList.add('show');
+        if (purchase) purchase.style.display = 'none';
+      }
+    }).catch(function(){ /* is_pro column may not exist yet */ });
+}
+
+</script>
+</body>
+</html>
