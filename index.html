@@ -308,7 +308,7 @@ td:first-child{padding-left:16px;}
   </section>
   <section class="faq-section" id="faq-anchor">
     <div class="faq-inner">
-      <h2 class="faq-title">Questions &amp; answers</h2>
+      <h2 class="faq-title">Questions & answers</h2>
       <div class="faq-list">
         <div class="faq-item">
           <button class="faq-q" onclick="toggleFaq(this)">Can I cancel my Pro subscription at any time?<span class="faq-icon">+</span></button>
@@ -500,7 +500,7 @@ td:first-child{padding-left:16px;}
         <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">6. BioTracker Pro</h3><p>Pro subscriptions are charged at &pound;19.99 per application cycle. All payments are processed securely via Stripe. No refunds are issued once a subscription period has begun.</p></div>
         <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">7. Changes</h3><p>These terms may be updated at any time. Continued use of BioTracker constitutes acceptance of the latest version.</p></div>
         <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">8. Contact</h3>
-          <p style="margin-bottom:6px;"><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#ef86818980af8d86809b9d8e8c848a9dc19a84" style="color:var(--accent);"><span class="__cf_email__" data-cfemail="1871767e77587a71776c6a797b737d6a366d73">[email&#160;protected]</span></a></p>
+          <p style="margin-bottom:6px;"><strong>Email:</strong> <a href="mailto:info@biotracker.uk" style="color:var(--accent);">info@biotracker.uk</a></p>
           <p><strong>Phone:</strong> +44 7458 319031</p>
         </div>
       </div>
@@ -541,7 +541,7 @@ td:first-child{padding-left:16px;}
     <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px;">
       <div style="display:flex;align-items:center;gap:14px;font-size:0.88rem;color:var(--navy);padding:12px 16px;background:var(--off-white);border-radius:10px;">
         <span style="font-weight:600;color:var(--grey);min-width:100px;">Email</span>
-        <a href="/cdn-cgi/l/email-protection#fd94939b92bd9f9492898f9c9e96988fd38896" style="color:var(--accent);text-decoration:none;"><span class="__cf_email__" data-cfemail="c7aea9a1a887a5aea8b3b5a6a4aca2b5e9b2ac">[email&#160;protected]</span></a>
+        <a href="mailto:info@biotracker.uk" style="color:var(--accent);">info@biotracker.uk</a>
       </div>
       <div style="display:flex;align-items:center;gap:14px;font-size:0.88rem;color:var(--navy);padding:12px 16px;background:var(--off-white);border-radius:10px;">
         <span style="font-weight:600;color:var(--grey);min-width:100px;">Phone</span>
@@ -551,7 +551,7 @@ td:first-child{padding-left:16px;}
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 var SUPABASE_URL = 'https://xzyzclpipfgcljvtnuvy.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6eXpjbHBpcGZnY2xqdnRudXZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MTEzNjMsImV4cCI6MjA4ODk4NzM2M30.8O5033EJiJrmKeKanC0ktbnXQ2YGb0Z4OLupEQVRTfU';
 var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -891,4 +891,13 @@ function openTracker(type){
   currentTracker=type;statusFilter='';
   document.getElementById('t-search').value='';
   document.getElementById('t-sector').value='';
-  documen
+  documen  document.querySelectorAll('.stab').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.stab')[0].classList.add('active');
+  document.getElementById('tracker-title').textContent=trackerMeta[type].title;
+  document.getElementById('tracker-subtitle').textContent=trackerMeta[type].sub;
+  goTo('page-tracker');
+  loadSheet();
+}
+</script>
+</body>
+</html>
