@@ -870,4 +870,13 @@ function openTracker(type) {
   currentTracker = type; statusFilter = '';
   document.getElementById('t-search').value = '';
   document.getElementById('t-sector').value = '';
-  document.query
+  document.querySelectorAll('.stab').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.stab')[0].classList.add('active');
+  document.getElementById('tracker-title').textContent = trackerMeta[type].title;
+  document.getElementById('tracker-subtitle').textContent = trackerMeta[type].sub;
+  goTo('page-tracker');
+  loadSheet();
+}
+</script>
+</body>
+</html>
