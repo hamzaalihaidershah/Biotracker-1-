@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioTracker - UK Life Sciences Internships</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--navy:#0f1b3d;--navy-mid:#1a2d5a;--white:#ffffff;--off-white:#f6f8fc;--grey:#7b89a8;--grey-light:#e2e8f4;--grey-mid:#c4cfe6;--accent:#2f72f5;--accent-lt:#5590ff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;font-weight:300;background:var(--white);color:var(--navy);overflow-x:hidden;}
+.page{display:none;min-height:100vh;flex-direction:column;}
+.page.active{display:flex;}
+nav{background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:64px;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.nav-logo-text{font-family:'Playfair Display',serif;font-weight:600;font-size:1.15rem;color:white;}
+.nav-logo-text em{color:var(--accent-lt);font-style:italic;}
+.nav-links{display:flex;align-items:center;gap:28px;}
+.nav-links a{color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.84rem;font-weight:300;cursor:pointer;transition:color .2s;}
+.nav-links a:hover{color:white;}
+.nav-auth{display:flex;align-items:center;gap:12px;}
+.btn-nav-login{color:rgba(255,255,255,0.6);font-size:0.82rem;cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;font-weight:300;}
+.btn-nav-login:hover{color:white;}
+.btn-nav-signup{background:var(--accent);color:white;border:none;padding:8px 18px;border-radius:8px;font-size:0.82rem;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s;}
+.btn-nav-signup:hover{background:var(--accent-lt);}
+.nav-avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:600;}
+.hero{background:var(--navy);padding:100px 52px 90px;flex:1;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;right:-60px;top:-60px;width:520px;height:520px;background:radial-gradient(circle,rgba(47,114,245,0.12) 0%,transparent 65%);border-radius:50%;}
+.hero-inner{max-width:700px;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.6rem);font-weight:400;color:white;line-height:1.18;margin-bottom:24px;}
+.hero p{color:rgba(255,255,255,0.45);font-size:0.97rem;max-width:480px;line-height:1.82;margin-bottom:44px;font-weight:300;}
+.btn-hero{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:white;padding:16px 34px;border-radius:10px;font-weight:500;font-size:1rem;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;}
+.btn-hero:hover{background:var(--accent-lt);transform:translateY(-2px);}
+.hero-stats{display:flex;gap:48px;margin-top:56px;flex-wrap:wrap;padding-top:40px;border-top:1px solid rgba(255,255,255,0.08);justify-content:center;}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:400;color:white;display:block;line-height:1;margin-bottom:4px;}
+.stat-num em{color:var(--accent-lt);font-style:normal;}
+.stat-label{color:rgba(255,255,255,0.4);font-size:0.78rem;}
+.how-section{background:var(--off-white);padding:88px 52px;border-top:1px solid var(--grey-light);}
+.sec-inner{max-width:1100px;margin:0 auto;}
+.sec-eyebrow{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:12px;}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,2.8vw,2.4rem);font-weight:400;color:var(--navy);margin-bottom:52px;line-height:1.22;max-width:440px;}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.step-card{background:white;border:1.5px solid var(--grey-light);border-radius:14px;padding:30px;transition:all .25s;}
+.step-card:hover{border-color:rgba(47,114,245,0.3);transform:translateY(-3px);box-shadow:0 12px 32px rgba(15,27,61,0.07);}
+.step-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:400;color:var(--grey-light);margin-bottom:18px;}
+.step-card h4{font-size:0.9rem;font-weight:500;color:var(--navy);margin-bottom:10px;}
+.step-card p{font-size:0.85rem;color:var(--grey);line-height:1.72;}
+.pro-section{background:var(--navy);padding:88px 52px;}
+.pro-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.pro-left .sec-eyebrow{color:var(--accent-lt);}
+.pro-left .sec-title{color:white;margin-bottom:20px;}
+.pro-left p{color:rgba(255,255,255,0.5);font-size:0.92rem;line-height:1.78;margin-bottom:32px;}
+.pro-feats{list-style:none;margin-bottom:32px;}
+.pro-feats li{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);font-size:0.88rem;}
+.pro-feats li:last-child{border:none;}
+.feat-icon{width:28px;height:28px;background:rgba(47,114,245,0.15);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.8rem;}
+.pro-card-right{background:white;border-radius:18px;padding:36px;box-shadow:0 20px 60px rgba(0,0,0,0.25);}
+.pro-plan-name{font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--grey);margin-bottom:6px;}
+.pro-price{font-size:2.8rem;font-weight:300;color:var(--navy);letter-spacing:-2px;line-height:1;margin-bottom:4px;}
+.pro-price-sub{font-size:0.8rem;color:var(--grey);margin-bottom:26px;}
+.pro-card-feats{list-style:none;margin-bottom:26px;}
+.pro-card-feats li{padding:9px 0;font-size:0.86rem;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--grey-light);color:var(--navy);}
+.pro-card-feats li:last-child{border:none;}
+.ck{color:var(--accent);font-weight:600;flex-shrink:0;}
+.btn-pro{width:100%;padding:14px;border-radius:10px;font-weight:600;font-size:0.92rem;cursor:pointer;font-family:'Inter',sans-serif;border:none;background:var(--accent);color:white;transition:all .2s;}
+.btn-pro:hover{background:var(--accent-lt);}
+.btn-free{width:100%;margin-top:10px;padding:12px;border-radius:10px;font-weight:400;font-size:0.88rem;cursor:pointer;font-family:'Inter',sans-serif;border:1.5px solid var(--grey-light);background:transparent;color:var(--grey);transition:all .2s;}
+.btn-free:hover{border-color:var(--navy);color:var(--navy);}
+.faq-section{background:var(--off-white);padding:80px 52px;border-top:1px solid var(--grey-light);}
+.faq-inner{max-width:720px;margin:0 auto;}
+.faq-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,2.8vw,2.2rem);font-weight:400;color:var(--navy);margin-bottom:36px;text-align:center;}
+.faq-list{display:flex;flex-direction:column;}
+.faq-item{border:1.5px solid var(--grey-light);background:white;overflow:hidden;}
+.faq-item:first-child{border-radius:12px 12px 0 0;}
+.faq-item:last-child{border-radius:0 0 12px 12px;}
+.faq-item+.faq-item{border-top:none;}
+.faq-q{width:100%;background:none;border:none;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.92rem;font-weight:500;color:var(--navy);text-align:left;transition:background .15s;}
+.faq-q:hover{background:rgba(47,114,245,0.03);}
+.faq-icon{flex-shrink:0;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--grey-mid);display:flex;align-items:center;justify-content:center;color:var(--grey);font-size:1.1rem;line-height:1;transition:all .25s;}
+.faq-item.open .faq-icon{background:var(--accent);border-color:var(--accent);color:white;transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+.faq-item.open .faq-a{max-height:300px;}
+.faq-a-inner{padding:0 24px 20px;font-size:0.85rem;color:var(--grey);line-height:1.78;}
+.pro-status-banner{background:rgba(15,140,80,0.06);border:1.5px solid rgba(15,140,80,0.2);border-radius:14px;padding:28px;text-align:center;display:none;margin-bottom:16px;}
+.pro-status-banner.show{display:block;}
+.pro-check{font-size:2rem;margin-bottom:10px;}
+.pro-status-banner h4{font-size:1rem;font-weight:600;color:var(--navy);margin-bottom:6px;}
+.pro-status-banner p{font-size:0.83rem;color:var(--grey);line-height:1.6;}
+.btn-go-trackers{display:inline-block;margin-top:14px;padding:10px 24px;background:var(--accent);color:white;border-radius:8px;font-size:0.85rem;font-weight:500;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:background .2s;}
+.btn-go-trackers:hover{background:var(--accent-lt);}
+footer{background:var(--navy);padding:36px 52px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;border-top:1px solid rgba(255,255,255,0.06);flex-shrink:0;}
+.footer-logo{display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-weight:400;color:white;font-size:1.15rem;cursor:pointer;}
+.footer-logo em{color:var(--accent-lt);font-style:italic;}
+footer p{color:rgba(255,255,255,0.28);font-size:0.77rem;}
+.footer-links{display:flex;gap:22px;}
+.footer-links a{color:rgba(255,255,255,0.35);text-decoration:none;font-size:0.8rem;cursor:pointer;transition:color .2s;}
+.footer-links a:hover{color:white;}
+.browse-hero{background:var(--navy);padding:72px 52px 64px;flex-shrink:0;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.browse-hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:400;color:white;margin-bottom:14px;}
+.browse-hero p{color:rgba(255,255,255,0.45);font-size:0.92rem;max-width:480px;line-height:1.78;font-weight:300;}
+.browse-grid-wrap{flex:1;background:var(--off-white);padding:52px;}
+.browse-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1100px;margin:0 auto;}
+.tracker-card{background:white;border:1.5px solid var(--grey-light);border-radius:16px;padding:36px 28px;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden;}
+.tracker-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--grey-light);transition:background .25s;}
+.tracker-card:hover{border-color:rgba(47,114,245,0.3);transform:translateY(-4px);box-shadow:0 16px 40px rgba(15,27,61,0.1);}
+.tracker-card:hover::before{background:var(--accent);}
+.tracker-icon{width:52px;height:52px;border-radius:12px;background:var(--off-white);border:1.5px solid var(--grey-light);display:flex;align-items:center;justify-content:center;font-size:1.4rem;}
+.tracker-card h3{font-size:0.95rem;font-weight:500;color:var(--navy);}
+.tracker-card p{font-size:0.82rem;color:var(--grey);line-height:1.65;flex:1;}
+.tracker-arrow{display:flex;align-items:center;justify-content:flex-end;color:var(--grey);font-size:1.2rem;transition:color .2s;}
+.tracker-card:hover .tracker-arrow{color:var(--accent);}
+.tracker-hero{background:var(--navy);padding:60px 52px 52px;flex-shrink:0;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.back-btn{display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,0.5);font-size:0.82rem;cursor:pointer;margin-bottom:24px;transition:color .2s;background:none;border:none;font-family:'Inter',sans-serif;}
+.back-btn:hover{color:white;}
+.tracker-hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3.5vw,2.5rem);font-weight:400;color:white;margin-bottom:10px;}
+.tracker-hero p{color:rgba(255,255,255,0.45);font-size:0.92rem;max-width:480px;line-height:1.7;}
+.tracker-body{flex:1;background:var(--off-white);padding:36px 52px;}
+.tracker-controls{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;max-width:1200px;margin-left:auto;margin-right:auto;}
+.controls-left{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.t-search{padding:9px 14px;border-radius:8px;border:1.5px solid var(--grey-light);font-family:'Inter',sans-serif;font-size:0.85rem;color:var(--navy);outline:none;transition:border-color .2s;background:white;width:220px;}
+.t-search:focus{border-color:var(--accent);}
+.t-select{padding:9px 32px 9px 14px;border-radius:8px;border:1.5px solid var(--grey-light);font-family:'Inter',sans-serif;font-size:0.85rem;color:var(--navy);background:white;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237b89a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+.t-count{font-size:0.78rem;color:var(--grey);}
+.status-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+.stab{padding:6px 14px;border-radius:7px;font-size:0.77rem;cursor:pointer;border:1.5px solid var(--grey-light);background:white;color:var(--grey);transition:all .2s;font-family:'Inter',sans-serif;}
+.stab.active{background:var(--navy);color:white;border-color:var(--navy);}
+.stab:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+.table-wrap{background:white;border-radius:12px;border:1px solid var(--grey-light);overflow:hidden;overflow-x:auto;box-shadow:0 2px 12px rgba(15,27,61,0.05);max-width:1200px;margin:0 auto;}
+table{width:100%;border-collapse:collapse;min-width:800px;}
+thead tr{background:var(--navy);}
+thead th{color:rgba(255,255,255,0.4);font-size:0.63rem;font-weight:500;text-transform:uppercase;letter-spacing:1.2px;padding:12px 14px;text-align:left;white-space:nowrap;}
+thead th:first-child{padding-left:16px;}
+tbody tr{border-bottom:1px solid var(--grey-light);transition:background .12s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:rgba(47,114,245,0.02);}
+td{padding:11px 14px;vertical-align:middle;}
+td:first-child{padding-left:16px;}
+.td-co{font-weight:500;white-space:nowrap;color:var(--navy);font-size:0.83rem;}
+.td-prog{color:var(--navy);font-size:0.83rem;max-width:200px;line-height:1.4;font-weight:400;}
+.sector-cell{color:var(--navy);font-size:0.83rem;white-space:nowrap;font-weight:400;}
+.date-cell{color:var(--navy);font-size:0.83rem;white-space:nowrap;font-weight:400;}
+.close-ok{font-size:0.77rem;color:var(--navy);}
+.close-urgent{font-size:0.77rem;font-weight:500;color:#b06b00;}
+.close-gone{font-size:0.77rem;color:#b02030;}
+.sp{display:inline-flex;align-items:center;gap:4px;font-size:0.66rem;font-weight:500;padding:3px 9px;border-radius:100px;white-space:nowrap;}
+.sp::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.sp-recent{background:rgba(47,114,245,0.1);color:#2f72f5;}
+.sp-open{background:rgba(15,140,80,0.1);color:#0f8c50;}
+.sp-closing{background:rgba(176,107,0,0.1);color:#b06b00;}
+.sp-closed{background:rgba(176,32,48,0.1);color:#b02030;}
+.apply-btn{background:var(--navy);color:white;border:none;padding:6px 14px;border-radius:6px;font-size:0.72rem;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;white-space:nowrap;}
+.apply-btn:hover{background:var(--accent);}
+.progress-select{appearance:none;-webkit-appearance:none;border:1.5px solid var(--grey-light);border-radius:7px;padding:5px 26px 5px 9px;font-size:0.72rem;font-family:'Inter',sans-serif;color:var(--navy);background:white;cursor:pointer;outline:none;min-width:130px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237b89a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;transition:border-color .2s;}
+.progress-select:focus{border-color:var(--accent);}
+.ps-interested{border-color:#2f72f5;color:#2f72f5;background-color:rgba(47,114,245,0.05);}
+.ps-submitted{border-color:#7c3aed;color:#7c3aed;background-color:rgba(124,58,237,0.05);}
+.ps-inprogress{border-color:#b06b00;color:#b06b00;background-color:rgba(176,107,0,0.05);}
+.ps-accepted{border-color:#0f8c50;color:#0f8c50;background-color:rgba(15,140,80,0.05);}
+.ps-rejected{border-color:#b02030;color:#b02030;background-color:rgba(176,32,48,0.05);}
+.ps-notinterested{border-color:#7b89a8;color:#7b89a8;}
+.login-prompt-cell{font-size:0.72rem;color:var(--grey);white-space:nowrap;}
+.login-prompt-cell a{color:var(--accent);cursor:pointer;text-decoration:underline;}
+.auth-page{flex:1;display:flex;align-items:center;justify-content:center;background:var(--off-white);padding:52px 20px;}
+.auth-card{background:white;border-radius:18px;border:1px solid var(--grey-light);padding:44px 48px;width:100%;max-width:560px;box-shadow:0 4px 24px rgba(15,27,61,0.07);}
+.auth-card h2{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:400;color:var(--navy);margin-bottom:6px;}
+.auth-sub{color:var(--grey);font-size:0.87rem;margin-bottom:32px;line-height:1.6;}
+.auth-sub a{color:var(--accent);cursor:pointer;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.form-group{margin-bottom:14px;display:flex;flex-direction:column;gap:5px;}
+.form-group label{font-size:0.75rem;font-weight:500;color:var(--navy);letter-spacing:0.3px;}
+.form-input{padding:10px 13px;border-radius:8px;border:1.5px solid var(--grey-light);font-family:'Inter',sans-serif;font-size:0.88rem;color:var(--navy);outline:none;transition:border-color .2s;font-weight:300;width:100%;}
+.form-input:focus{border-color:var(--accent);}
+.check-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:22px;margin-top:8px;}
+.check-row input{margin-top:2px;flex-shrink:0;accent-color:var(--accent);}
+.check-row label{font-size:0.81rem;color:var(--grey);line-height:1.55;}
+.check-row label a{color:var(--accent);cursor:pointer;}
+.btn-submit{width:100%;padding:13px;background:var(--accent);color:white;border:none;border-radius:10px;font-weight:500;font-size:0.92rem;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s;}
+.btn-submit:hover{background:var(--accent-lt);}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed;}
+.auth-error{background:rgba(176,32,48,0.08);border:1px solid rgba(176,32,48,0.2);color:#b02030;border-radius:8px;padding:10px 14px;font-size:0.82rem;margin-bottom:16px;display:none;}
+.auth-error.show{display:block;}
+.auth-success{background:rgba(15,140,80,0.08);border:1px solid rgba(15,140,80,0.2);color:#0f8c50;border-radius:8px;padding:10px 14px;font-size:0.82rem;margin-bottom:16px;display:none;}
+.auth-success.show{display:block;}
+.social-divider{display:flex;align-items:center;gap:12px;margin:0 0 18px;}
+.social-divider::before,.social-divider::after{content:'';flex:1;height:1px;background:var(--grey-light);}
+.social-divider span{color:var(--grey);font-size:0.75rem;white-space:nowrap;}
+.btn-social{width:100%;padding:11px;border-radius:10px;border:1.5px solid var(--grey-light);background:white;display:flex;align-items:center;justify-content:center;gap:10px;font-size:0.88rem;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;color:var(--navy);font-weight:400;margin-bottom:10px;}
+.btn-social:hover{border-color:var(--navy);background:var(--off-white);}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(8,14,35,0.65);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal{background:white;border-radius:18px;padding:38px;max-width:440px;width:92%;position:relative;animation:mIn .2s ease;}
+@keyframes mIn{from{opacity:0;transform:scale(0.96) translateY(10px)}to{opacity:1;transform:none}}
+.modal-x{position:absolute;top:16px;right:16px;background:var(--off-white);border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--grey);}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:400;color:var(--navy);margin-bottom:8px;}
+.modal p{color:var(--grey);font-size:0.87rem;margin-bottom:22px;line-height:1.65;font-weight:300;}
+.modal-note{text-align:center;font-size:0.72rem;color:var(--grey);margin-top:10px;}
+.forgot-link{display:block;text-align:right;font-size:0.78rem;color:var(--accent);cursor:pointer;margin-top:-8px;margin-bottom:18px;}
+.forgot-link:hover{text-decoration:underline;}
+@media(max-width:768px){
+  nav{padding:0 16px;height:56px;}
+  .nav-links{display:none;}
+  .nav-auth{gap:8px;}
+  .btn-nav-signup{padding:6px 12px;font-size:0.75rem;}
+  .hero{padding:60px 20px 50px;}
+  .hero h1{font-size:1.8rem;}
+  .hero p{font-size:0.88rem;}
+  .btn-hero{padding:13px 24px;font-size:0.9rem;}
+  .hero-stats{gap:24px;margin-top:36px;padding-top:28px;}
+  .stat-num{font-size:1.4rem;}
+  .how-section{padding:52px 20px;}
+  .steps-grid{grid-template-columns:1fr;gap:14px;}
+  .pro-section{padding:52px 20px;}
+  .pro-inner{grid-template-columns:1fr;gap:32px;}
+  .pro-card-right{padding:24px;}
+  .browse-hero{padding:44px 20px 36px;}
+  .browse-grid-wrap{padding:24px 16px;}
+  .browse-grid{grid-template-columns:1fr 1fr;gap:12px;}
+  .tracker-card{padding:20px 16px;}
+  .tracker-hero{padding:36px 20px 28px;}
+  .tracker-body{padding:20px 16px;}
+  .tracker-controls{flex-direction:column;align-items:flex-start;}
+  .t-search{width:100%;}
+  .controls-left{flex-direction:column;width:100%;}
+  .status-tabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;width:100%;}
+  .table-wrap{border-radius:8px;}
+  footer{padding:24px 16px;flex-direction:column;align-items:flex-start;gap:12px;}
+  .auth-page{padding:24px 16px;}
+  .auth-card{padding:28px 20px;}
+  .form-row{grid-template-columns:1fr;}
+  .pro-price{font-size:2rem;}
+  .nav-logo-text{font-size:1rem;}
+  .faq-section{padding:52px 20px;}
+}
+@media(max-width:480px){
+  .browse-grid{grid-template-columns:1fr;}
+  .hero h1{font-size:1.5rem;}
+}
+</style>
+<script>
+!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId setPersonPropertiesForFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
+posthog.init('phc_mIptOemXn5J4gKjiI3TTDZoIWETswvtEiqrU0fZhOXq', {
+  api_host: 'https://eu.i.posthog.com',
+  person_profiles: 'identified_only'
+});
+</script>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <nav>
+    <div class="nav-logo" onclick="goHome()">
+      <span class="nav-logo-text">Bio<em>Tracker</em></span>
+    </div>
+    <div class="nav-links">
+      <a onclick="goHome()">Home</a>
+      <a onclick="scrollHow()">How It Works</a>
+      <a onclick="goTo('page-browse')">Trackers</a>
+      <a onclick="scrollPro()">Pro</a>
+      <a onclick="scrollFaq()">FAQ</a>
+    </div>
+    <div class="nav-auth" id="nav-auth-home"></div>
+  </nav>
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>All your life sciences<br>openings in one place.</h1>
+      <p>BioTracker brings together every UK internship, placement year and graduate programme across pharma, biotech and life sciences.</p>
+      <button class="btn-hero" onclick="goTo('page-browse')">Browse Trackers &rarr;</button>
+      <div class="hero-stats">
+        <div><span class="stat-num">140<em>+</em></span><div class="stat-label">Live Roles</div></div>
+        <div><span class="stat-num">50<em>+</em></span><div class="stat-label">Companies</div></div>
+        <div><span class="stat-num">5</span><div class="stat-label">Sectors</div></div>
+        <div><span class="stat-num">UK</span><div class="stat-label">Only</div></div>
+      </div>
+    </div>
+  </section>
+  <section class="how-section" id="how-anchor">
+    <div class="sec-inner">
+      <div class="sec-eyebrow">How it works</div>
+      <h2 class="sec-title">Your shortcut to a life sciences career.</h2>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">01</div><h4>Browse All Roles</h4><p>Choose your tracker and see every UK opening in one clean table. Filter by sector, type and deadline.</p></div>
+        <div class="step-card"><div class="step-num">02</div><h4>Apply Directly</h4><p>No middleman. Every listing links straight to the official company application portal.</p></div>
+        <div class="step-card"><div class="step-num">03</div><h4>Go Pro for Alerts</h4><p>Upgrade to BioTracker Pro and get instant notifications the moment a new role goes live.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="pro-section" id="pro-anchor">
+    <div class="pro-inner">
+      <div class="pro-left">
+        <div class="sec-eyebrow">BioTracker Pro</div>
+        <h2 class="sec-title">Never miss an opening again.</h2>
+        <p>The tracker is completely free. Upgrade to Pro and we will notify you the instant a new role goes live.</p>
+        <ul class="pro-feats">
+          <li><div class="feat-icon">&#128276;</div>Instant email alerts when new roles go live</li>
+          <li><div class="feat-icon">&#9200;</div>Deadline reminders so you never miss out</li>
+          <li><div class="feat-icon">&#128140;</div>Weekly digest of all new openings</li>
+        </ul>
+      </div>
+      <div class="pro-card-right">
+        <div class="pro-plan-name">BioTracker Pro</div>
+        <div class="pro-price">&pound;5.99</div>
+        <div class="pro-price-sub">per month</div>
+        <ul class="pro-card-feats">
+          <li><span class="ck">&#10003;</span>Instant new role alerts</li>
+          <li><span class="ck">&#10003;</span>Deadline reminders</li>
+          <li><span class="ck">&#10003;</span>Weekly digest email</li>
+          <li><span class="ck">&#10003;</span>Priority support</li>
+        </ul>
+        <button class="btn-pro" onclick="openModal()">Get Pro Alerts &rarr;</button>
+        <button class="btn-free" onclick="goTo('page-browse')">Browse for free</button>
+      </div>
+    </div>
+  </section>
+  <section class="faq-section" id="faq-anchor">
+    <div class="faq-inner">
+      <h2 class="faq-title">Questions &amp; answers</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Can I cancel my Pro subscription at any time?<span class="faq-icon">+</span></button>
+          <div class="faq-a"><div class="faq-a-inner">Yes, completely. You can cancel BioTracker Pro at any time. You keep Pro access until the end of your current billing period and won't be charged again after that.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">What payment methods do you accept?<span class="faq-icon">+</span></button>
+          <div class="faq-a"><div class="faq-a-inner">We accept all major credit and debit cards (Visa, Mastercard, Amex) via Stripe. Apple Pay and Google Pay are also supported where available on your device.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Is my payment information secure?<span class="faq-icon">+</span></button>
+          <div class="faq-a"><div class="faq-a-inner">Yes. BioTracker never stores your card details. All payments go through Stripe, which is PCI DSS Level 1 certified - the highest standard in payment security. Your information is fully encrypted.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">What's the difference between the free tracker and Pro?<span class="faq-icon">+</span></button>
+          <div class="faq-a"><div class="faq-a-inner">The free tracker lets you browse every UK life sciences role, filter by sector, and track your applications at no cost. BioTracker Pro adds instant email alerts when new roles go live, deadline reminders, and a weekly digest so you always apply first.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">How quickly do I get Pro access after subscribing?<span class="faq-icon">+</span></button>
+          <div class="faq-a"><div class="faq-a-inner">Instantly. As soon as your payment goes through, Pro is activated on your account. You'll get a confirmation email and your alerts will be live straight away.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="footer-logo" onclick="goHome()">Bio<em>Tracker</em></div>
+    <p>&copy; 2026 BioTracker. All rights reserved.</p>
+    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:16px;">
+      <a href="https://www.instagram.com/biotracker_uk/" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.4);transition:color .2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@biotracker_uk" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.4);transition:color .2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/company/biotracker" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.4);transition:color .2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+    </div>
+      <div class="footer-links"><a onclick="showContact()">Contact</a><a href="https://biotracker.uk/privacy.html">Privacy Policy</a><a onclick="goTo('page-terms')">Terms</a></div>
+    </div>
+  </footer>
+</div>
+
+<!-- SIGN UP -->
+<div class="page" id="page-signup">
+  <nav>
+    <div class="nav-logo" onclick="goHome()"><span class="nav-logo-text">Bio<em>Tracker</em></span></div>
+    <div class="nav-links"><a onclick="goHome()">Home</a><a onclick="goTo('page-browse')">Trackers</a></div>
+    <div class="nav-auth"><button class="btn-nav-login" onclick="goTo('page-login')">Already have an account? Log in</button></div>
+  </nav>
+  <div class="auth-page">
+    <div class="auth-card">
+      <h2>Create your account</h2>
+      <p class="auth-sub">Track your applications and never lose your progress. Already have an account? <a onclick="goTo('page-login')">Log in</a></p>
+      <div class="auth-error" id="signup-error"></div>
+      <div class="auth-success" id="signup-success"></div>
+      <button class="btn-social" onclick="doSocialLogin('google')">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+        Continue with Google
+      </button>
+      <div class="social-divider"><span>or sign up with email</span></div>
+      <div class="form-row">
+        <div class="form-group"><label for="su-firstname">First Name</label><input class="form-input" type="text" id="su-firstname" placeholder=""></div>
+        <div class="form-group"><label for="su-lastname">Last Name</label><input class="form-input" type="text" id="su-lastname" placeholder=""></div>
+      </div>
+      <div class="form-group"><label for="su-phone">Phone Number</label><input class="form-input" type="tel" id="su-phone" placeholder="+44 7700 000000"></div>
+      <div class="form-group"><label for="su-email">Email Address</label><input class="form-input" type="email" id="su-email" placeholder="your@email.com"></div>
+      <div class="form-group"><label for="su-password">Create Password</label><input class="form-input" type="password" id="su-password" placeholder="At least 8 characters"></div>
+      <div class="form-group"><label for="su-confirm-password">Confirm Password</label><input class="form-input" type="password" id="su-confirm-password" placeholder="Re-enter your password"></div>
+      <div class="check-row">
+        <input type="checkbox" id="su-terms">
+        <label for="su-terms">I agree to the <a onclick="goTo('page-terms')">Terms and Conditions</a> and Privacy Policy.</label>
+      </div>
+      <button class="btn-submit" id="su-btn" onclick="doSignup()">Create Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="page" id="page-login">
+  <nav>
+    <div class="nav-logo" onclick="goHome()"><span class="nav-logo-text">Bio<em>Tracker</em></span></div>
+    <div class="nav-links"><a onclick="goHome()">Home</a><a onclick="goTo('page-browse')">Trackers</a></div>
+    <div class="nav-auth"><button class="btn-nav-signup" onclick="goTo('page-signup')">Sign up free</button></div>
+  </nav>
+  <div class="auth-page">
+    <div class="auth-card" style="max-width:440px;">
+      <h2>Welcome back</h2>
+      <p class="auth-sub">Log in to track your applications. No account? <a onclick="goTo('page-signup')">Sign up free</a></p>
+      <div class="auth-error" id="login-error"></div>
+      <button class="btn-social" onclick="doSocialLogin('google')">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+        Continue with Google
+      </button>
+      <div class="social-divider"><span>or log in with email</span></div>
+      <div class="form-group"><label for="li-email">Email Address</label><input class="form-input" type="email" id="li-email" placeholder="your@email.com"></div>
+      <div class="form-group"><label for="li-password">Password</label><input class="form-input" type="password" id="li-password" placeholder="Your password"></div>
+      <a class="forgot-link" onclick="doForgotPassword()">Forgot your password?</a>
+      <div class="auth-success" id="forgot-success" style="margin-bottom:14px;"></div>
+      <button class="btn-submit" id="li-btn" onclick="doLogin()">Log In</button>
+    </div>
+  </div>
+</div>
+
+<!-- BROWSE -->
+<div class="page" id="page-browse">
+  <nav>
+    <div class="nav-logo" onclick="goHome()"><span class="nav-logo-text">Bio<em>Tracker</em></span></div>
+    <div class="nav-links">
+      <a onclick="goHome()">Home</a><a onclick="goHomeHow()">How It Works</a>
+      <a onclick="goTo('page-browse')">Trackers</a><a onclick="goHomePro()">Pro</a>
+    </div>
+    <div class="nav-auth" id="nav-auth-browse"></div>
+  </nav>
+  <div class="browse-hero">
+    <h1>Trackers</h1>
+    <p>Choose a tracker below to view every UK life sciences opening for that role type, updated daily.</p>
+  </div>
+  <div class="browse-grid-wrap">
+    <div class="browse-grid">
+      <div class="tracker-card" onclick="openTracker('spring')"><div class="tracker-icon">&#127807;</div><h3>Spring Weeks</h3><p>One-week insight programmes. Perfect for first and second-year students exploring the sector.</p><div class="tracker-arrow">&rarr;</div></div>
+      <div class="tracker-card" onclick="openTracker('summer')"><div class="tracker-icon">&#9728;&#65039;</div><h3>Summer Internships</h3><p>8-12 week paid internships over the summer. The most popular route into life sciences.</p><div class="tracker-arrow">&rarr;</div></div>
+      <div class="tracker-card" onclick="openTracker('placement')"><div class="tracker-icon">&#128300;</div><h3>Placement Years</h3><p>12-month industry placements, typically in your third year. Hands-on experience at leading companies.</p><div class="tracker-arrow">&rarr;</div></div>
+      <div class="tracker-card" onclick="openTracker('graduate')"><div class="tracker-icon">&#127891;</div><h3>Graduate Schemes</h3><p>Structured 2-3 year programmes for recent graduates across R&amp;D, commercial and operations.</p><div class="tracker-arrow">&rarr;</div></div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-logo" onclick="goHome()">Bio<em>Tracker</em></div>
+    <p>&copy; 2026 BioTracker. All rights reserved.</p>
+    <div class="footer-links"><a onclick="showContact()">Contact</a><a onclick="goTo('page-terms')">Terms</a><a onclick="goTo('page-privacy')">Privacy Policy</a></div>
+  </footer>
+</div>
+
+<!-- TRACKER -->
+<div class="page" id="page-tracker">
+  <nav>
+    <div class="nav-logo" onclick="goHome()"><span class="nav-logo-text">Bio<em>Tracker</em></span></div>
+    <div class="nav-links">
+      <a onclick="goHome()">Home</a><a onclick="goHomeHow()">How It Works</a>
+      <a onclick="goTo('page-browse')">Trackers</a><a onclick="goHomePro()">Pro</a>
+    </div>
+    <div class="nav-auth" id="nav-auth-tracker"></div>
+  </nav>
+  <div class="tracker-hero">
+    <button class="back-btn" onclick="goTo('page-browse')">&larr; Back to Trackers</button>
+    <h1 id="tracker-title">Summer Internships</h1>
+    <p id="tracker-subtitle">All UK life sciences summer internship opportunities, updated daily.</p>
+  </div>
+  <div class="tracker-body">
+    <div class="tracker-controls">
+      <div class="controls-left">
+        <input class="t-search" type="text" placeholder="Search company or role..." id="t-search" oninput="renderLive()">
+        <select class="t-select" id="t-sector" onchange="renderLive()">
+          <option value="">All Sectors</option>
+          <option>Biotechnology</option><option>Pharmaceutical</option>
+          <option>Research and Development</option><option>Life Sciences Consulting</option>
+        </select>
+        <div class="status-tabs">
+          <button class="stab active" onclick="setStab(this,'')">All</button>
+          <button class="stab" onclick="setStab(this,'recently opened')">Recently Opened</button>
+          <button class="stab" onclick="setStab(this,'open')">Open</button>
+          <button class="stab" onclick="setStab(this,'closing')">Closing Soon</button>
+          <button class="stab" onclick="setStab(this,'closed')">Closed</button>
+        </div>
+      </div>
+      <div class="t-count" id="t-count"></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Progress</th><th></th><th>Company</th><th>Programme</th><th>Sector</th><th>Opens</th><th>Closes</th><th>Status</th><th>Apply</th></tr></thead>
+        <tbody id="tracker-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-logo" onclick="goHome()">Bio<em>Tracker</em></div>
+    <p>&copy; 2026 BioTracker. All rights reserved.</p>
+    <div class="footer-links"><a onclick="showContact()">Contact</a><a onclick="goTo('page-terms')">Terms</a><a onclick="goTo('page-privacy')">Privacy Policy</a></div>
+  </footer>
+</div>
+
+<!-- TERMS -->
+<div class="page" id="page-terms">
+  <nav>
+    <div class="nav-logo" onclick="goHome()"><span class="nav-logo-text">Bio<em>Tracker</em></span></div>
+    <div class="nav-links"><a onclick="goHome()">Home</a><a onclick="goTo('page-browse')">Trackers</a></div>
+    <div class="nav-auth" id="nav-auth-terms"></div>
+  </nav>
+  <div style="flex:1;background:var(--off-white);padding:52px;">
+    <div style="max-width:720px;margin:0 auto;background:white;border-radius:16px;padding:48px;border:1px solid var(--grey-light);">
+      <h1 style="font-family:'Playfair Display',serif;font-weight:400;font-size:2rem;color:var(--navy);margin-bottom:8px;">Terms and Conditions</h1>
+      <p style="color:var(--grey);font-size:0.82rem;margin-bottom:36px;">Last updated: March 2026</p>
+      <div style="display:flex;flex-direction:column;gap:28px;font-size:0.88rem;line-height:1.75;color:var(--navy);">
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">1. About BioTracker</h3><p>BioTracker is operated as a sole trader business. These trackers are designed to help UK students discover life sciences internships, placement years, spring weeks and graduate schemes.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">2. No Affiliation</h3><p>Companies listed on BioTracker are not affiliated with or endorsed by BioTracker. All listings are sourced from publicly available information. Inclusion does not imply partnership.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">3. Accuracy</h3><p>We strive to keep listings accurate and up to date but cannot guarantee accuracy or timeliness. Always verify directly with the company.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">4. Permitted Use</h3><p>You may use BioTracker for personal, non-commercial purposes. You may not scrape, redistribute, or commercially reproduce any tracker content.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">5. Accounts</h3><p>You are responsible for keeping your account credentials secure. We collect personal data solely to provide and improve our service.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">6. BioTracker Pro</h3><p>Pro subscriptions are charged at &pound;5.99 per month. All payments are processed securely via Stripe. No refunds are issued once a subscription period has begun.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">7. Changes</h3><p>These terms may be updated at any time. Continued use of BioTracker constitutes acceptance of the latest version.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">8. Contact</h3>
+          <p style="margin-bottom:6px;"><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#2940474f46694b40465d5b484a424c5b075c42" style="color:var(--accent);"><span class="__cf_email__" data-cfemail="97fef9f1f8d7f5fef8e3e5f6f4fcf2e5b9e2fc">[email&#160;protected]</span></a></p>
+          <p><strong>Phone:</strong> +44 7458 319031</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-logo" onclick="goHome()">Bio<em>Tracker</em></div>
+    <p>&copy; 2026 BioTracker. All rights reserved.</p>
+    <div class="footer-links"><a onclick="showContact()">Contact</a><a onclick="goTo('page-terms')">Terms</a><a onclick="goTo('page-privacy')">Privacy Policy</a></div>
+  </footer>
+</div>
+
+
+<!-- PRIVACY POLICY -->
+<div class="page" id="page-privacy">
+  <nav>
+    <div class="nav-logo" onclick="goHome()"><span class="nav-logo-text">Bio<em>Tracker</em></span></div>
+    <div class="nav-links"><a onclick="goHome()">Home</a><a onclick="goTo('page-browse')">Trackers</a></div>
+    <div class="nav-auth" id="nav-auth-privacy"></div>
+  </nav>
+  <div style="flex:1;background:var(--off-white);padding:52px;">
+    <div style="max-width:720px;margin:0 auto;background:white;border-radius:16px;padding:48px;border:1px solid var(--grey-light);">
+      <h1 style="font-family:'Playfair Display',serif;font-weight:400;font-size:2rem;color:var(--navy);margin-bottom:8px;">Privacy Policy</h1>
+      <p style="color:var(--grey);font-size:0.82rem;margin-bottom:36px;">Last updated: March 2026</p>
+      <div style="display:flex;flex-direction:column;gap:28px;font-size:0.88rem;line-height:1.75;color:var(--navy);">
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">1. Who We Are</h3><p>BioTracker is operated as a sole trader business based in the UK. We operate the BioTracker life sciences internship aggregator platform. For privacy enquiries contact us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cba2a5ada48ba9a2a4bfb9aaa8a0aeb9e5bea0">[email&#160;protected]</a>.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">2. Data We Collect</h3><p><strong>Account data</strong> &mdash; your name, phone number, email address and hashed password, collected when you register.<br><br><strong>Billing data</strong> &mdash; your subscription status and Stripe customer identifier. We do not store your card number or bank details; these are held exclusively by Stripe.<br><br><strong>Usage data</strong> &mdash; pages visited and features used, collected automatically to help us improve the product.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">3. How We Use Your Data</h3><p>We use your personal data to: create and manage your account and provide the service; process subscription payments; send transactional emails such as account confirmation and payment receipts; monitor and improve the platform; and respond to your support requests.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">4. Legal Basis for Processing</h3><p><strong>Contract performance</strong> &mdash; to provide the service you have subscribed to.<br><br><strong>Legitimate interests</strong> &mdash; to understand how the platform is used and improve our product, where these interests are not overridden by your rights.<br><br><strong>Legal obligation</strong> &mdash; to comply with applicable laws, including tax and financial regulations.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">5. Data Retention</h3><p>We retain your account data for as long as your account is active. If you delete your account we will remove your personal data within 30 days, except where we are required to retain it for longer by law (for example, billing records for tax purposes may be retained for up to 7 years).</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">6. Third-Party Processors</h3><p><strong>Supabase</strong> &mdash; database hosting and authentication. Your account credentials and data are stored on Supabase's infrastructure.<br><br><strong>Stripe</strong> &mdash; payment processing. Stripe handles all card data and subscription billing. Stripe is PCI DSS Level 1 certified.<br><br>We do not sell your personal data to any third party.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">7. Cookies</h3><p>We use session cookies set by Supabase to maintain your authenticated session. These are strictly necessary to provide the service.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">8. Your Rights</h3><p>Under UK GDPR you have the right to: access a copy of your data; request correction of inaccurate data; request deletion of your data; restrict or object to processing; and data portability. To exercise any of these rights, email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="99f0f7fff6d9fbf0f6edebf8faf2fcebb7ecf2">[email&#160;protected]</a>. We will respond within one calendar month.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">9. Right to Complain</h3><p>If you are unhappy with how we handle your data you have the right to lodge a complaint with the UK Information Commissioner's Office (ICO) at <a href="https://ico.org.uk" target="_blank" style="color:var(--accent);">ico.org.uk</a>.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">10. Changes</h3><p>We may update this Privacy Policy periodically. The date at the top of this page indicates when the policy was last revised.</p></div>
+        <div><h3 style="font-weight:500;margin-bottom:8px;font-size:0.95rem;">11. Contact</h3><p>For any privacy-related questions, email us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c4adaaa2ab84a6adabb0b6a5a7afa1b6eab1af">[email&#160;protected]</a>.</p></div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-logo" onclick="goHome()">Bio<em>Tracker</em></div>
+    <p>&copy; 2026 BioTracker. All rights reserved.</p>
+    <div class="footer-links"><a onclick="showContact()">Contact</a><a onclick="goTo('page-terms')">Terms</a><a onclick="goTo('page-privacy')">Privacy Policy</a></div>
+  </footer>
+</div>
+
+<!-- PRO MODAL -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal()">&#215;</button>
+    <div class="pro-status-banner" id="pro-status-banner">
+      <div class="pro-check">&#10003;</div>
+      <h4>You're on BioTracker Pro</h4>
+      <p>Your subscription is active - you have full access to instant alerts, deadline reminders and weekly digests.</p>
+      <button class="btn-go-trackers" onclick="goTo('page-browse');closeModal()">Go to Trackers &rarr;</button>
+    </div>
+    <div id="modal-purchase">
+      <h3>Get BioTracker Pro</h3>
+      <p>Be first to know when new life sciences roles go live. Instant alerts, deadline reminders, weekly digest - &pound;5.99 per cycle.</p>
+      <button onclick="goToPro()" style="display:block;width:100%;padding:14px;background:var(--accent);color:white;border-radius:10px;font-weight:500;font-size:0.95rem;font-family:Inter,sans-serif;text-align:center;border:none;cursor:pointer;box-sizing:border-box;margin-top:8px;">Get Instant Alerts &mdash; &pound;5.99 / cycle &rarr;</button>
+      <p class="modal-note">Secure payment via Stripe</p>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contact-modal" onclick="if(event.target===this)document.getElementById('contact-modal').classList.remove('show')">
+  <div class="modal">
+    <button class="modal-x" onclick="document.getElementById('contact-modal').classList.remove('show')">&#215;</button>
+    <h3>Contact BioTracker</h3>
+    <p>Got a question, suggestion or spotted a missing role? Get in touch.</p>
+    <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px;">
+      <div style="display:flex;align-items:center;gap:14px;font-size:0.88rem;color:var(--navy);padding:12px 16px;background:var(--off-white);border-radius:10px;">
+        <span style="font-weight:600;color:var(--grey);min-width:100px;">Email</span>
+        <a href="/cdn-cgi/l/email-protection#432a2d252c03212a2c373122202826316d3628" style="color:var(--accent);text-decoration:none;"><span class="__cf_email__" data-cfemail="c0a9aea6af80a2a9afb4b2a1a3aba5b2eeb5ab">[email&#160;protected]</span></a>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;font-size:0.88rem;color:var(--navy);padding:12px 16px;background:var(--off-white);border-radius:10px;">
+        <span style="font-weight:600;color:var(--grey);min-width:100px;">Phone</span>
+        <span>+44 7458 319031</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+var SUPABASE_URL = 'https://xzyzclpipfgcljvtnuvy.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6eXpjbHBpcGZnY2xqdnRudXZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MTEzNjMsImV4cCI6MjA4ODk4NzM2M30.8O5033EJiJrmKeKanC0ktbnXQ2YGb0Z4OLupEQVRTfU';
+var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{flowType:"pkce",detectSessionInUrl:true,persistSession:true}});
+var SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTEmnXfI1Ct423-Mo4T8xd4beKKhCV2fhPRtb9exvrqnzdNPZg2s8BP2tUB4Rvi730y291PQNhLvPmo/pub?gid=0&single=true&output=csv';
+var sheetJobs = {spring:[],summer:[],placement:[],graduate:[]};
+var dataLoaded = false;
+var currentTracker = 'summer';
+var statusFilter = '';
+var currentUser = null;
+var userProgress = {};
+
+var trackerMeta = {
+  spring:    {title:'Spring Weeks',       sub:'All UK life sciences spring week insight programmes, updated daily.'},
+  summer:    {title:'Summer Internships', sub:'All UK life sciences summer internship opportunities, updated daily.'},
+  placement: {title:'Placement Years',    sub:'All UK life sciences placement year opportunities, updated daily.'},
+  graduate:  {title:'Graduate Schemes',   sub:'All UK life sciences graduate scheme opportunities, updated daily.'}
+};
+
+var PROGRESS_OPTIONS = [
+  {val:'not applied',label:'Not Applied'},{val:'interested',label:'Interested'},
+  {val:'submitted',label:'Submitted Application'},{val:'assessment',label:'Online Assessment'},
+  {val:'hireview',label:'HireView'},{val:'telephone',label:'Telephone Interview'},
+  {val:'online interview',label:'Online Interview'},{val:'in person interview',label:'In Person Interview'},
+  {val:'accepted',label:'Accepted'},{val:'rejected',label:'Rejected'},
+  {val:'not interested',label:'Not Interested'}
+];
+
+var PROGRESS_CLASS = {
+  'interested':'ps-interested','submitted':'ps-submitted',
+  'assessment':'ps-inprogress','hireview':'ps-inprogress',
+  'telephone':'ps-inprogress','online interview':'ps-inprogress',
+  'in person interview':'ps-inprogress','accepted':'ps-accepted',
+  'rejected':'ps-rejected','not interested':'ps-notinterested'
+};
+
+sb.auth.getSession().then(function(r) {
+  if (r.data && r.data.session) { currentUser = r.data.session.user; loadUserProgress(); }
+  updateNavAuth();
+});
+sb.auth.onAuthStateChange(function(event, session) {
+  currentUser = session ? session.user : null;
+  if (currentUser) { loadUserProgress(); } else { userProgress = {}; }
+  updateNavAuth();
+  if (dataLoaded) renderLive();
+});
+
+function updateNavAuth() {
+  var ids = ['nav-auth-home','nav-auth-browse','nav-auth-tracker','nav-auth-terms','nav-auth-privacy'];
+  ids.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (currentUser) {
+      var init = (currentUser.email || '?')[0].toUpperCase();
+      el.innerHTML = '<div style="display:flex;align-items:center;gap:10px;"><div class="nav-avatar">' + init + '</div><button class="btn-nav-login" onclick="doLogout()">Log out</button></div>';
+    } else {
+      el.innerHTML = '<button class="btn-nav-login" onclick="goTo(\'page-login\')">Log in</button><button class="btn-nav-signup" onclick="goTo(\'page-signup\')">Sign up free</button>';
+    }
+  });
+}
+
+function goTo(id, pushHistory) {
+  if (pushHistory !== false) { history.pushState({page: id}, '', '#' + id); }
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+window.addEventListener('popstate', function(e) {
+  goTo(e.state && e.state.page ? e.state.page : 'page-home', false);
+});
+history.replaceState({page: 'page-home'}, '', '#page-home');
+
+function goHome() { goTo('page-home'); }
+function scrollHow() { goTo('page-home'); setTimeout(function() { document.getElementById('how-anchor').scrollIntoView({behavior:'smooth'}); }, 60); }
+function scrollPro() { goTo('page-home'); setTimeout(function() { document.getElementById('pro-anchor').scrollIntoView({behavior:'smooth'}); }, 60); }
+function scrollFaq() { goTo('page-home'); setTimeout(function() { document.getElementById('faq-anchor').scrollIntoView({behavior:'smooth'}); }, 60); }
+function goHomeHow() { goTo('page-home'); setTimeout(function() { document.getElementById('how-anchor').scrollIntoView({behavior:'smooth'}); }, 60); }
+function goHomePro() { goTo('page-home'); setTimeout(function() { document.getElementById('pro-anchor').scrollIntoView({behavior:'smooth'}); }, 60); }
+function showContact() { document.getElementById('contact-modal').classList.add('show'); }
+function openModal() { document.getElementById('modal').classList.add('show'); checkProStatus(); if(window.posthog) posthog.capture('pro_modal_opened'); }
+function closeModal() { document.getElementById('modal').classList.remove('show'); }
+function setStab(btn, val) {
+  document.querySelectorAll('.stab').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active'); statusFilter = val; renderLive();
+}
+function toggleFaq(btn) {
+  var item = btn.parentElement;
+  var isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(el) { el.classList.remove('open'); });
+  if (!isOpen) item.classList.add('open');
+}
+function goToPro() {
+  if (!currentUser) {
+    closeModal();
+    goTo('page-signup');
+    setTimeout(function() {
+      var err = document.getElementById('signup-error');
+      if (err) { err.textContent = 'Please create an account first, then upgrade to Pro.'; err.classList.add('show'); }
+    }, 100);
+    return;
+  }
+  if(window.posthog) posthog.capture('pro_checkout_started', {email: currentUser ? currentUser.email : 'unknown'}); window.open('https://buy.stripe.com/bJe00k0bfdI0bNn7cu9ws01?prefilled_email=' + encodeURIComponent(currentUser.email), '_blank');
+}
+function doSocialLogin(provider) {
+  sb.auth.signInWithOAuth({
+    provider: provider,
+    options: {
+      redirectTo: 'https://biotracker.uk',
+      queryParams: { access_type: 'offline', prompt: 'consent' },
+      skipBrowserRedirect: false
+    }
+  }).then(function(res) {
+    if (res.error) alert('Could not sign in with ' + provider + '. Please try again.');
+  });
+}
+function checkProStatus() {
+  if (!currentUser) return;
+  sb.from('profiles').select('is_pro').eq('id', currentUser.id).single()
+    .then(function(res) {
+      if (res.data && res.data.is_pro) {
+        var banner = document.getElementById('pro-status-banner');
+        var purchase = document.getElementById('modal-purchase');
+        if (banner) banner.classList.add('show');
+        if (purchase) purchase.style.display = 'none';
+      }
+    }).catch(function() {});
+}
+function doForgotPassword() {
+  var email = document.getElementById('li-email').value.trim();
+  var okEl = document.getElementById('forgot-success');
+  var errEl = document.getElementById('login-error');
+  errEl.classList.remove('show'); okEl.classList.remove('show');
+  if (!email) { errEl.textContent = 'Please enter your email address above first.'; errEl.classList.add('show'); return; }
+  sb.auth.resetPasswordForEmail(email, {redirectTo: window.location.href}).then(function(res) {
+    if (res.error) { errEl.textContent = res.error.message; errEl.classList.add('show'); }
+    else { okEl.textContent = 'Password reset email sent. Please check your inbox.'; okEl.classList.add('show'); }
+  });
+}
+function doSignup() {
+  var btn = document.getElementById('su-btn');
+  var errEl = document.getElementById('signup-error');
+  var okEl = document.getElementById('signup-success');
+  errEl.classList.remove('show'); okEl.classList.remove('show');
+  var fname = document.getElementById('su-firstname').value.trim();
+  var lname = document.getElementById('su-lastname').value.trim();
+  var phone = document.getElementById('su-phone').value.trim();
+  var email = document.getElementById('su-email').value.trim();
+  var password = document.getElementById('su-password').value;
+  var confirm = document.getElementById('su-confirm-password').value;
+  var terms = document.getElementById('su-terms').checked;
+  if (!fname || !lname) { errEl.textContent = 'Please enter your first and last name.'; errEl.classList.add('show'); return; }
+  if (!phone) { errEl.textContent = 'Please enter your phone number.'; errEl.classList.add('show'); return; }
+  if (!email) { errEl.textContent = 'Please enter your email address.'; errEl.classList.add('show'); return; }
+  if (password.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; errEl.classList.add('show'); return; }
+  if (password !== confirm) { errEl.textContent = 'Passwords do not match.'; errEl.classList.add('show'); return; }
+  if (!terms) { errEl.textContent = 'Please agree to the Terms and Conditions to continue.'; errEl.classList.add('show'); return; }
+  btn.disabled = true; btn.textContent = 'Creating account...';
+  sb.auth.signUp({email: email, password: password}).then(function(res) {
+    if (res.error) { errEl.textContent = res.error.message; errEl.classList.add('show'); btn.disabled = false; btn.textContent = 'Create Account'; return Promise.reject('auth error'); }
+    return sb.from('profiles').insert({id: res.data.user.id, first_name: fname, last_name: lname, phone: phone});
+  }).then(function() {
+    okEl.textContent = 'Account created! Please check your email to confirm your address.';
+    if(window.posthog) posthog.capture('signup_completed', {method: 'email'});
+    okEl.classList.add('show'); btn.disabled = false; btn.textContent = 'Create Account';
+  }).catch(function(e) {
+    if (e !== 'auth error') { errEl.textContent = 'Something went wrong. Please try again.'; errEl.classList.add('show'); }
+    btn.disabled = false; btn.textContent = 'Create Account';
+  });
+}
+function doLogin() {
+  var btn = document.getElementById('li-btn');
+  var errEl = document.getElementById('login-error');
+  errEl.classList.remove('show');
+  var email = document.getElementById('li-email').value.trim();
+  var password = document.getElementById('li-password').value;
+  if (!email || !password) { errEl.textContent = 'Please enter your email and password.'; errEl.classList.add('show'); return; }
+  btn.disabled = true; btn.textContent = 'Logging in...';
+  sb.auth.signInWithPassword({email: email, password: password}).then(function(res) {
+    if (res.error) { errEl.textContent = res.error.message; errEl.classList.add('show'); btn.disabled = false; btn.textContent = 'Log In'; }
+    else { btn.disabled = false; btn.textContent = 'Log In'; goTo('page-browse'); if(window.posthog) posthog.capture('login', {method: 'email'}); }
+  });
+}
+function doLogout() {
+  sb.auth.signOut().then(function() { currentUser = null; userProgress = {}; updateNavAuth(); goHome(); });
+}
+function pKey(company, prog) { return company + '||' + prog; }
+function loadUserProgress() {
+  if (!currentUser) return;
+  sb.from('progress').select('*').eq('user_id', currentUser.id).then(function(res) {
+    if (res.data) { userProgress = {}; res.data.forEach(function(row) { userProgress[pKey(row.company, row.programme)] = row.status; }); }
+    if (dataLoaded) renderLive();
+  });
+}
+function saveProgress(company, prog, status) {
+  if (!currentUser) return;
+  sb.from('profiles').upsert({id: currentUser.id}, {onConflict: 'id'}).then(function() {
+    return sb.from('progress').upsert({
+      user_id: currentUser.id, company: company, programme: prog,
+      tracker_type: currentTracker, status: status, updated_at: new Date().toISOString()
+    }, {onConflict: 'user_id,company,programme'});
+  }).catch(function(e) { console.error('Save error:', e); });
+}
+function onProgressChange(sel, company, prog) {
+  var val = sel.value;
+  userProgress[pKey(company, prog)] = val;
+  sel.className = 'progress-select';
+  if (PROGRESS_CLASS[val]) sel.classList.add(PROGRESS_CLASS[val]);
+  saveProgress(company, prog, val);
+}
+function buildProgressCell(company, prog) {
+  if (!currentUser) return '<td class="login-prompt-cell"><a onclick="goTo(\'page-login\')">Log in</a> to track</td>';
+  var key = pKey(company, prog);
+  var current = userProgress[key] || 'not applied';
+  var cls = PROGRESS_CLASS[current] ? ' ' + PROGRESS_CLASS[current] : '';
+  var opts = PROGRESS_OPTIONS.map(function(o) { return '<option value="' + o.val + '"' + (o.val === current ? ' selected' : '') + '>' + o.label + '</option>'; }).join('');
+  var sc = company.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  var sp = prog.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  return '<td><select class="progress-select' + cls + '" onchange="onProgressChange(this,\'' + sc + '\',\'' + sp + '\')">' + opts + '</select></td>';
+}
+function typeKey(t) {
+  t = (t || '').toLowerCase().trim();
+  if (t.indexOf('spring') >= 0) return 'spring';
+  if (t.indexOf('summer') >= 0) return 'summer';
+  if (t.indexOf('placement') >= 0) return 'placement';
+  if (t.indexOf('graduate') >= 0) return 'graduate';
+  return null;
+}
+function parseCSV(text) {
+  var lines = text.trim().split('\n');
+  var headers = lines[0].split(',').map(function(h) { return h.replace(/^"|"$/g, '').trim(); });
+  return lines.slice(1).map(function(line) {
+    var cols = [], cur = '', inQ = false;
+    for (var i = 0; i < line.length; i++) {
+      var c = line[i];
+      if (c === '"') { inQ = !inQ; } else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; } else { cur += c; }
+    }
+    cols.push(cur.trim());
+    var obj = {};
+    headers.forEach(function(h, i) { obj[h] = (cols[i] || '').replace(/^"|"$/g, '').trim(); });
+    return obj;
+  }).filter(function(r) { return r.Company && r.Company.length > 0; });
+}
+function parseDate(str) {
+  if (!str) return null;
+  var s = str.trim();
+  var months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+  var parts = s.split(/[\s\-\/]+/);
+  if (parts.length >= 3) {
+    var d, m, y;
+    if (isNaN(parts[0])) { m = months[parts[0].toLowerCase().substring(0,3)]; d = parseInt(parts[1]); y = parseInt(parts[2]); }
+    else { d = parseInt(parts[0]); m = months[parts[1].toLowerCase().substring(0,3)]; y = parseInt(parts[2]); }
+    if (m !== undefined && !isNaN(d) && !isNaN(y)) return new Date(y, m, d);
+  }
+  var d2 = new Date(s);
+  if (!isNaN(d2.getTime())) return d2;
+  return null;
+}
+function calcStatus(opensStr, closesStr) {
+  var today = new Date(); today.setHours(0,0,0,0);
+  var opens = parseDate(opensStr); var closes = parseDate(closesStr);
+  if (closes && closes < today) return 'closed';
+  if (opens && opens > today) return 'closed';
+  if (closes) { var daysLeft = Math.ceil((closes - today) / (1000*60*60*24)); if (daysLeft <= 14) return 'closing'; }
+  if (opens) { var daysOpen = Math.ceil((today - opens) / (1000*60*60*24)); if (daysOpen <= 7) return 'recently opened'; }
+  return 'open';
+}
+function loadSheet() {
+  dataLoaded = false;
+  document.getElementById('tracker-tbody').innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#7b89a8;font-size:0.85rem;">Loading roles...</td></tr>';
+  fetch(SHEET_URL).then(function(r) { return r.text(); }).then(function(text) {
+    var rows = parseCSV(text);
+    sheetJobs = {spring:[], summer:[], placement:[], graduate:[]};
+    rows.forEach(function(r) {
+      var key = typeKey(r.Type); if (!key) return;
+      sheetJobs[key].push({company:r.Company||'', prog:r.Programme||'', sector:r.Sector||'', opens:r.Opens||'', closes:r.Closes||'', status:calcStatus(r.Opens||'', r.Closes||''), url:r.URL||''});
+    });
+    dataLoaded = true;
+    if (!currentUser) { renderLive(); }
+    else {
+      sb.from('progress').select('*').eq('user_id', currentUser.id).then(function(res) {
+        userProgress = {};
+        if (res.data) { res.data.forEach(function(row) { userProgress[pKey(row.company, row.programme)] = row.status; }); }
+        renderLive();
+      }).catch(function() { renderLive(); });
+    }
+  }).catch(function() {
+    document.getElementById('tracker-tbody').innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#7b89a8;font-size:0.85rem;">Could not load roles. Please try again later.</td></tr>';
+  });
+}
+var LOGO_DOMAINS = {
+  'gsk':'gsk.com','astrazeneca':'astrazeneca.com','pfizer':'pfizer.com','roche':'roche.com',
+  'novartis':'novartis.com','sanofi':'sanofi.com','eli lilly':'lilly.com','abbvie':'abbvie.com',
+  'johnson & johnson':'jnj.com','bayer':'bayer.com','takeda':'takeda.com','ucb pharma':'ucb.com',
+  'boehringer ingelheim':'boehringer-ingelheim.com','ipsen':'ipsen.com','seqirus':'seqirus.com',
+  'amgen':'amgen.com','msd':'msd.com','huron consulting':'huronconsultinggroup.com',
+  'lek consulting':'lek.com','putnam associates':'putnam.com','bain & company':'bain.com'
+};
+function setLogos() {
+  document.querySelectorAll('.logo-cell').forEach(function(cell) {
+    var co = cell.getAttribute('data-co') || '';
+    var domain = LOGO_DOMAINS[co.toLowerCase().trim()] || (co.toLowerCase().replace(/[^a-z0-9]/g,'') + '.com');
+    cell.innerHTML = '<img src="https://img.logo.dev/' + domain + '?token=pk_f9LQatIqQPGlbfeY6R665A&size=40" style="width:28px;height:28px;object-fit:contain;border-radius:4px;">';
+  });
+}
+function spCls(s) { if (s==='recently opened') return 'sp-recent'; if (s==='open') return 'sp-open'; if (s==='closing') return 'sp-closing'; return 'sp-closed'; }
+function spLbl(s) { if (s==='recently opened') return 'Recently Opened'; if (s==='open') return 'Open'; if (s==='closing') return 'Closing Soon'; return 'Closed'; }
+function closeCls(s) { if (s==='closing') return 'close-urgent'; if (s==='closed') return 'close-gone'; return 'close-ok'; }
+function renderLive() {
+  if (!dataLoaded) return;
+  var search = document.getElementById('t-search').value.toLowerCase();
+  var sector = document.getElementById('t-sector').value;
+  var jobs = sheetJobs[currentTracker] || [];
+  var filtered = jobs.filter(function(j) {
+    var ms = !search || j.company.toLowerCase().indexOf(search) >= 0 || j.prog.toLowerCase().indexOf(search) >= 0;
+    var mx = !sector || j.sector === sector;
+    var mv = !statusFilter || j.status === statusFilter;
+    return ms && mx && mv;
+  });
+  document.getElementById('t-count').textContent = filtered.length > 0 ? (filtered.length + ' of ' + jobs.length + ' roles shown - Updated today') : '';
+  if (filtered.length === 0) {
+    var msg = jobs.length === 0 ? 'No roles are currently listed - check back soon or <a onclick="goHomePro()" style="color:var(--accent);cursor:pointer;font-weight:500;">get BioTracker Pro alerts</a> to be notified the moment they go live.' : 'No roles match your filters.';
+    document.getElementById('tracker-tbody').innerHTML = '<tr><td colspan="9" style="text-align:center;padding:48px 20px;color:#7b89a8;font-size:0.85rem;line-height:1.7;">' + msg + '</td></tr>';
+    return;
+  }
+  document.getElementById('tracker-tbody').innerHTML = filtered.map(function(j) {
+    var btn = j.url ? '<button class="apply-btn" onclick="window.open(\'' + j.url + '\',\'_blank\')">Apply</button>' : '<button class="apply-btn" style="opacity:0.4;cursor:default;">Soon</button>';
+    return '<tr>' + buildProgressCell(j.company, j.prog) + '<td class="logo-cell" data-co="' + j.company + '"></td><td class="td-co">' + j.company + '</td><td class="td-prog">' + j.prog + '</td><td class="sector-cell">' + j.sector + '</td><td class="date-cell">' + j.opens + '</td><td><span class="' + closeCls(j.status) + '">' + j.closes + '</span></td><td><span class="sp ' + spCls(j.status) + '">' + spLbl(j.status) + '</span></td><td>' + btn + '</td></tr>';
+  }).join('');
+  setLogos();
+}
+function openTracker(type) {
+  currentTracker = type; statusFilter = '';
+  document.getElementById('t-search').value = '';
+  document.getElementById('t-sector').value = '';
+  document.querySelectorAll('.stab').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.stab')[0].classList.add('active');
+  document.getElementById('tracker-title').textContent = trackerMeta[type].title;
+  document.getElementById('tracker-subtitle').textContent = trackerMeta[type].sub;
+  goTo('page-tracker');
+  loadSheet();
+}
+</script>
+</body>
+</html>
